@@ -163,7 +163,7 @@ $document.ready(function () {
 			}
 		});
 	}
-	
+
 	/**
 	 * toggleSwiperCaptionAnimation
 	 * @description  toggle swiper animations on active slides
@@ -997,26 +997,6 @@ $document.ready(function () {
 							image.src = items[j].getAttribute('href');
 						}
 					}
-				}
-			});
-		}
-	}
-
-	/**
-	 * RD Twitter Feed
-	 * @description Enables RD Twitter Feed plugin
-	 */
-	if (plugins.twitterfeed.length > 0) {
-		var i;
-		for (i = 0; i < plugins.twitterfeed.length; i++) {
-			var twitterfeedItem = plugins.twitterfeed[i];
-			$(twitterfeedItem).RDTwitter({
-				hideReplies: false,
-				localTemplate: {
-					avatar: "images/features/rd-twitter-post-avatar-48x48.jpg"
-				},
-				callback: function () {
-					$window.trigger("resize");
 				}
 			});
 		}
