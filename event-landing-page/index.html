@@ -22,10 +22,15 @@
 
 		var executionMode = ondevice ? "local" : "remote";
 
+		var perfStats = {
+			executionMode: executionMode
+		};
+
 		function logPerf(event) {
 			var LOG_TAG = "PERF";
 			var value = performance.now();
 			console.log(LOG_TAG, executionMode, event.type, event.detail, value);
+			perfStats[event.type] = value;
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
@@ -60,7 +65,7 @@
 			};
 		}
 	</script>
-	<script src="target/at-ondevice.js"></script>
+	<script src="target/at.min.js"></script>
 
 	<script>
 		// window.adobe.target.getOffers({
