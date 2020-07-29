@@ -149,7 +149,7 @@
 								<div>
 									<div class="reveal-inline-block text-extra-small"><span
 											class="text-middle inset-right-10 icon icon-xxs icon-primary mdi mdi-calendar-today"></span><span
-											class="text-middle">July 21-25, 2016</span></div>
+											class="text-middle" id="conf-date">July 21-25, 2016</span></div>
 									<hr class="divider divider-vertical reveal-inline-block">
 									<div class="reveal-inline-block text-extra-small"><span
 											class="text-middle inset-right-10 icon icon-xxs icon-primary mdi mdi-map-marker"></span><span
@@ -1257,5 +1257,9 @@
 <script src="js/core.min.js"></script>
 <script src="js/script.js"></script>
 <!-- Coded by Mnemon1k-->
+<script>
+	var visit = repeatVisit ? "repeat" : "first";
+	document.getElementById("conf-date").innerHTML = visit + ' ' + executionMode + ' ' + property;
+</script>
 </body>
 </html>
