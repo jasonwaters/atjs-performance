@@ -20,10 +20,21 @@
 
 		var ondevice = urlParams.get("ondevice") !== null ? urlParams.get("ondevice") === "true" : Math.random() < 0.5; //if ondevice is not forced, do a 50/50 split randomly
 
+		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
+
+		var repeatVisit = urlParams.get("repeatvisit") !== null;
+
+		var at_property = {
+			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
+			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
+		}
+
 		var executionMode = ondevice ? "local" : "remote";
 
 		var perfStats = {
-			executionMode: executionMode
+			executionMode: executionMode,
+			property: property,
+			repeatVisit: repeatVisit
 		};
 
 		function logPerf(event) {
@@ -62,7 +73,7 @@
 
 		function targetPageParams() {
 			return {
-				"at_property": "be92ac4c-e72f-9f82-2a80-2c211ea86578"
+				"at_property": at_property[property]
 			};
 		}
 	</script>
