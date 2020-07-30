@@ -22,7 +22,7 @@
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
-		var repeatVisit = urlParams.get("repeatvisit") !== null;
+		var repeatVisit = urlParams.get("repeatvisit") === "true";
 
 		var at_property = {
 			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
@@ -99,7 +99,8 @@
 			pageLoadEnabled: true,
 			viewsEnabled: true,
 			bodyHidingEnabled: true,
-			executionMode: executionMode
+			executionMode: executionMode,
+			pollingInterval: 0
 		};
 
 		function targetPageParams() {
