@@ -41,8 +41,8 @@
 			var LOG_TAG = "PERF";
 			value = typeof value === 'undefined' ? performance.now() : value;
 
-			perfStats[eventName] = value;
-			console.log(LOG_TAG, `${eventName} (${detail})`, Math.round(value));
+			perfStats[eventName] = Math.round(value);
+			console.log(LOG_TAG, `${eventName} (${detail})`, perfStats[eventName]);
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
