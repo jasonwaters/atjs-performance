@@ -1,4 +1,4 @@
-open("https://target-perf-site.netlify.app/?ondevice=true")
+open("https://target-perf-site.netlify.app/?ondevice=true&repeatvisit=false")
 
 waitForNoRequest(5000)
 runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];")
