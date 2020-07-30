@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "http-server . -p 80",
-    "publish": "surge . target-perf-site.surge.sh"
+    "publish": "surge . target-perf-site.surge.sh",
+	"generateHtml": "node generateHtml.js"
   },
   "keywords": [],
   "author": "",
