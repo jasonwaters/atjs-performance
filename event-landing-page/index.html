@@ -37,25 +37,40 @@
 			repeatVisit: repeatVisit
 		};
 
-		function logPerf(event) {
+		function logPerf(eventName, detail, value) {
 			var LOG_TAG = "PERF";
-			var value = performance.now();
-			console.log(LOG_TAG, executionMode, event.type, event.detail, value);
-			perfStats[event.type] = value;
+			value = typeof value === 'undefined' ? performance.now() : value;
+
+			perfStats[eventName] = value;
+			console.log(LOG_TAG, `${eventName} (${detail})`, Math.round(value));
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
-			logPerf(event);
+			logPerf("atJsLoadTime", "time to load at.js");
+		});
+
+		document.addEventListener("artifactDownloadSucceeded", function (event) {
+			logPerf("artifactDownloadTime", "time to download artifact after at.js loaded", performance.now() - perfStats["atJsLoadTime"]);
 		});
 
 		document.addEventListener("at-request-succeeded", function (event) {
-			logPerf(event);
+			var perfTime = performance.now();
+
+			var requestCompleteTime = perfTime - perfStats["atJsLoadTime"];
+
+			if(typeof perfStats["artifactDownloadTime"] !== 'undefined') {
+				logPerf("decisionCompleteTime", "time for decisioning engine to produce decisions", requestCompleteTime - perfStats["artifactDownloadTime"] );
+			}
+
+			logPerf("requestCompleteTime", "time for getOffers call to complete after at.js loaded", requestCompleteTime);
 		});
 
 		document.addEventListener("at-content-rendering-succeeded", function (event) {
-			logPerf(event);
-		});
+			var perfTime = performance.now();
 
+			logPerf("offersRendered", "time to render offers after at.js loaded", perfTime - perfStats["atJsLoadTime"]);
+			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
+		});
 
 		/////////
 
@@ -64,7 +79,7 @@
 			clientCode: "targettesting",
 			imsOrgId: "74F652E95F1B16FE0A495C92@AdobeOrg",
 			serverDomain: "targettesting.tt.omtrdc.net",
-			cookieDomain: "target-perf-site.netlify.app",
+			cookieDomain: location.host,
 			pageLoadEnabled: true,
 			viewsEnabled: true,
 			bodyHidingEnabled: true,
