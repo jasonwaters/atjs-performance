@@ -32,9 +32,18 @@
 		var executionMode = ondevice ? "local" : "remote";
 
 		var perfStats = {
-			executionMode: executionMode,
+			decisioiningMethod: executionMode == "local" ? "ondevice" : "server-side",
 			property: property,
-			repeatVisit: repeatVisit
+			visit: repeatVisit ? "repeat": "first"
+		};
+
+		var catchPointInsightMappings = {
+			"atLibraryLoaded": "i54417",
+			"artifactDownloaded": "i21234",
+			"decisioningFinished": "i41521",
+			"requestCompleted": "i38844",
+			"offersRendered": "i64216",
+			"endToEndOffersRendered": "i33428"
 		};
 
 		function logPerf(eventName, detail, value) {
