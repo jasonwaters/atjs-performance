@@ -46,29 +46,29 @@
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
-			logPerf("atJsLoadTime", "time to load at.js");
+			logPerf("atLibraryLoaded", "time to load at.js");
 		});
 
 		document.addEventListener("artifactDownloadSucceeded", function (event) {
-			logPerf("artifactDownloadTime", "time to download artifact after at.js loaded", performance.now() - perfStats["atJsLoadTime"]);
+			logPerf("artifactDownloaded", "time to download artifact after at.js loaded", performance.now() - perfStats["atLibraryLoaded"]);
 		});
 
 		document.addEventListener("at-request-succeeded", function (event) {
 			var perfTime = performance.now();
 
-			var requestCompleteTime = perfTime - perfStats["atJsLoadTime"];
+			var requestCompleted = perfTime - perfStats["atLibraryLoaded"];
 
-			if(typeof perfStats["artifactDownloadTime"] !== 'undefined') {
-				logPerf("decisionCompleteTime", "time for decisioning engine to produce decisions", requestCompleteTime - perfStats["artifactDownloadTime"] );
+			if(typeof perfStats["artifactDownloaded"] !== 'undefined') {
+				logPerf("decisioningFinished", "time for decisioning engine to produce decisions", requestCompleted - perfStats["artifactDownloaded"] );
 			}
 
-			logPerf("requestCompleteTime", "time for getOffers call to complete after at.js loaded", requestCompleteTime);
+			logPerf("requestCompleted", "time for getOffers call to complete after at.js loaded", requestCompleted);
 		});
 
 		document.addEventListener("at-content-rendering-succeeded", function (event) {
 			var perfTime = performance.now();
 
-			logPerf("offersRendered", "time to render offers after at.js loaded", perfTime - perfStats["atJsLoadTime"]);
+			logPerf("offersRendered", "time to render offers after at.js loaded", perfTime - perfStats["atLibraryLoaded"]);
 			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
 		});
 
