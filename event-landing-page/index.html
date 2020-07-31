@@ -23,6 +23,7 @@
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
 		var repeatVisit = urlParams.get("repeatvisit") === "true";
+		var useEcid = urlParams.get("ecid") === "true";
 
 		var at_property = {
 			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
@@ -34,7 +35,8 @@
 		var perfStats = {
 			decisioningMethod: executionMode == "local" ? "on-device" : "server-side",
 			property: property,
-			visit: repeatVisit ? "repeat": "first"
+			visit: repeatVisit ? "repeat": "first",
+			allocationId: useEcid ? "ecid" : "tntid"
 		};
 
 		var catchPointMappings = {
@@ -49,7 +51,8 @@
 			tracepoints: {
 				"decisioningMethod": "t12125",
 				"property": "t65215",
-				"visit": "t36912"
+				"visit": "t36912",
+				"allocationId": "t41212"
 			}
 		};
 
