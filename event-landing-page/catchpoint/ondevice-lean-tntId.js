@@ -1,7 +1,7 @@
 //Step-1
 open("https://target-perf-site.netlify.app/?ondevice=true&property=lean&ecid=false&repeatvisit=false")
 setStepName("Step1-First Visit")
-waitForElementPresent("//*[@id='action_insert_15960604422991312']");
+waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
 runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
 
@@ -30,7 +30,7 @@ setIndicator("i33428","${var(endToEndOffersRendered)}")
 //Step-2
 open("https://target-perf-site.netlify.app/?ondevice=true&property=lean&ecid=false&repeatvisit=true")
 setStepName("Step2-Repeat Visit")
-waitForElementPresent("//*[@id='action_insert_15960604422991312']");
+waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
 runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
 
