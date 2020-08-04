@@ -1,8 +1,9 @@
-open("https://target-perf-site.netlify.app/?ondevice=true&repeatvisit=false")
+//Step-1
+open("https://target-perf-site.netlify.app/?ondevice=false&property=lean&ecid=false&repeatvisit=false")
+setStepName("Step1-First Visit")
+waitForElementPresent("//*[@id='action_insert_15960604422991312']");
 
-waitForNoRequest(5000)
 runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
-
 
 storeScriptVariable("decisioningMethod","decisioningMethod;")
 storeScriptVariable("property","property;")
@@ -26,14 +27,17 @@ setIndicator("i38844","${var(requestCompleted)}")
 setIndicator("i64216","${var(offersRendered)}")
 setIndicator("i33428","${var(endToEndOffersRendered)}")
 
-open("https://target-perf-site.netlify.app/?ondevice=true&repeatvisit=true")
-waitForNoRequest(5000)
+//Step-2
+open("https://target-perf-site.netlify.app/?ondevice=false&property=lean&ecid=false&repeatvisit=true")
+setStepName("Step2-Repeat Visit")
+waitForElementPresent("//*[@id='action_insert_15960604422991312']");
+
 runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
 
 storeScriptVariable("decisioningMethod","decisioningMethod;")
 storeScriptVariable("property","property;")
 storeScriptVariable("visit","visit;")
-setTracepoint("t36912","${var(allocationId)}")
+storeScriptVariable("allocationId","allocationId;")
 storeScriptVariable("atLibraryLoaded","atLibraryLoaded;")
 storeScriptVariable("artifactDownloaded","artifactDownloaded;")
 storeScriptVariable("decisioningFinished","decisioningFinished;")

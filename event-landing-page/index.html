@@ -30,13 +30,19 @@
 			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
 		}
 
-		var executionMode = ondevice ? "local" : "remote";
+		var decisioningMethod = ondevice ? "on-device" : "server-side";
 
 		var perfStats = {
-			decisioningMethod: executionMode == "local" ? "on-device" : "server-side",
+			decisioningMethod: decisioningMethod,
 			property: property,
 			visit: repeatVisit ? "repeat": "first",
-			allocationId: useEcid ? "ecid" : "tntid"
+			allocationId: useEcid ? "ecid" : "tntid",
+			artifactDownloaded: -1,
+			atLibraryLoaded: -1,
+			decisioningFinished: -1,
+			requestCompleted: -1,
+			offersRendered: -1,
+			endToEndOffersRendered: -1
 		};
 
 		var catchPointMappings = {
@@ -102,7 +108,7 @@
 			pageLoadEnabled: true,
 			viewsEnabled: true,
 			bodyHidingEnabled: true,
-			executionMode: executionMode,
+			decisioningMethod: decisioningMethod,
 			pollingInterval: 0
 		};
 
@@ -1294,7 +1300,7 @@
 <!-- Coded by Mnemon1k-->
 <script>
 	var visit = repeatVisit ? "repeat" : "first";
-	document.getElementById("conf-date").innerHTML = visit + ' ' + executionMode + ' ' + property;
+	document.getElementById("conf-date").innerHTML = visit + ' ' + decisioningMethod + ' ' + property;
 </script>
 </body>
 </html>
