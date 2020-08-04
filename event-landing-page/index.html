@@ -18,6 +18,8 @@
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
 
+		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
+
 		var ondevice = urlParams.get("ondevice") !== null ? urlParams.get("ondevice") === "true" : Math.random() < 0.5; //if ondevice is not forced, do a 50/50 split randomly
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
@@ -35,6 +37,7 @@
 		var perfStats = {
 			decisioningMethod: decisioningMethod,
 			property: property,
+			bandwidth: bandwidth,
 			visit: repeatVisit ? "repeat": "first",
 			allocationId: useEcid ? "ecid" : "tntid",
 			artifactDownloaded: -1,
@@ -58,7 +61,8 @@
 				"decisioningMethod": "t12125",
 				"property": "t65215",
 				"visit": "t36912",
-				"allocationId": "t41212"
+				"allocationId": "t41212",
+				"bandwidth": "t81723"
 			}
 		};
 

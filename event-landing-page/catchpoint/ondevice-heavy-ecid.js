@@ -1,10 +1,11 @@
 //Step-1
-open("https://target-perf-site.netlify.app/?ondevice=true&property=heavy&ecid=true&repeatvisit=false")
+open("https://target-perf-site.netlify.app/?ondevice=true&property=heavy&ecid=true&repeatvisit=false&bandwidth=broadband");
 setStepName("Step1-First Visit")
 waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
-runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
+runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];var bandwidth = perfStats['bandwidth'];")
 
+storeScriptVariable("bandwidth","bandwidth;")
 storeScriptVariable("decisioningMethod","decisioningMethod;")
 storeScriptVariable("property","property;")
 storeScriptVariable("visit","visit;")
@@ -16,6 +17,7 @@ storeScriptVariable("requestCompleted","requestCompleted;")
 storeScriptVariable("offersRendered","offersRendered;")
 storeScriptVariable("endToEndOffersRendered","endToEndOffersRendered;")
 
+setTracepoint("t81723","${var(bandwidth)}")
 setTracepoint("t12125","${var(decisioningMethod)}")
 setTracepoint("t65215","${var(property)}")
 setTracepoint("t36912","${var(visit)}")
@@ -28,12 +30,13 @@ setIndicator("i64216","${var(offersRendered)}")
 setIndicator("i33428","${var(endToEndOffersRendered)}")
 
 //Step-2
-open("https://target-perf-site.netlify.app/?ondevice=true&property=heavy&ecid=true&repeatvisit=true")
+open("https://target-perf-site.netlify.app/?ondevice=true&property=heavy&ecid=true&repeatvisit=true&bandwidth=broadband");
 setStepName("Step2-Repeat Visit")
 waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
-runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];")
+runScript("var atLibraryLoaded = perfStats['atLibraryLoaded'];var artifactDownloaded = perfStats['artifactDownloaded'];var decisioningFinished = perfStats['decisioningFinished'];var requestCompleted = perfStats['requestCompleted'];var offersRendered = perfStats['offersRendered'];var endToEndOffersRendered = perfStats['endToEndOffersRendered'];var decisioningMethod = perfStats['decisioningMethod'];var property = perfStats['property'];var visit = perfStats['visit'];var allocationId = perfStats['allocationId'];var bandwidth = perfStats['bandwidth'];")
 
+storeScriptVariable("bandwidth","bandwidth;")
 storeScriptVariable("decisioningMethod","decisioningMethod;")
 storeScriptVariable("property","property;")
 storeScriptVariable("visit","visit;")
@@ -45,6 +48,7 @@ storeScriptVariable("requestCompleted","requestCompleted;")
 storeScriptVariable("offersRendered","offersRendered;")
 storeScriptVariable("endToEndOffersRendered","endToEndOffersRendered;")
 
+setTracepoint("t81723","${var(bandwidth)}")
 setTracepoint("t12125","${var(decisioningMethod)}")
 setTracepoint("t65215","${var(property)}")
 setTracepoint("t36912","${var(visit)}")
