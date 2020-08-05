@@ -6,7 +6,8 @@
   "scripts": {
     "start": "http-server . -p 80",
     "publish": "surge . target-perf-site.surge.sh",
-	"generateHtml": "node generateHtml.js"
+    "generateHtml": "node generateHtml.js",
+	"updateAtjs": "cp ../../atjs-library-v2/dist/at.min.js target"
   },
   "keywords": [],
   "author": "",

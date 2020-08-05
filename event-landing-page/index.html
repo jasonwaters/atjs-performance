@@ -71,7 +71,9 @@
 			value = typeof value === 'undefined' ? performance.now() : value;
 
 			perfStats[eventName] = Math.round(value);
-			console.log(LOG_TAG, `${eventName} (${detail})`, perfStats[eventName]);
+			const message = eventName + (typeof detail === "string" && detail.length > 0 ? ` (${detail})` : "");
+
+			console.log(LOG_TAG, message, perfStats[eventName]);
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
@@ -99,6 +101,13 @@
 
 			logPerf("offersRendered", "time to render offers after at.js loaded", perfTime - perfStats["atLibraryLoaded"]);
 			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
+
+			var internalTimings = window.perfTool.getTimings();
+			Object.keys(internalTimings).forEach(key => {
+				logPerf("int_" + key, "", internalTimings[key]);
+			});
+
+
 		});
 
 		/////////
