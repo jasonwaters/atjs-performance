@@ -92,11 +92,22 @@
 				logPerf("int_" + key, "", internalTimings[key]);
 			});
 
-			logPerf("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded"]);
-			logPerf("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["decisioningFinished"] );
-			logPerf("requestCompleted", "time for getOffers call to complete", internalTimings["requestCompleted"]);
+			if(internalTimings["artifactDownloaded"]) {
+				logPerf("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded"]);
+			}
 
-			logPerf("offersRendered", "time to render offers getOffers request completed", perfTime - internalTimings["requestCompleted"]);
+			if(internalTimings["decisioningFinished"]) {
+				logPerf("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["decisioningFinished"] );
+			}
+
+			if(internalTimings["requestCompleted"]) {
+				logPerf("requestCompleted", "time for getOffers call to complete", internalTimings["requestCompleted"]);
+			}
+
+			if(internalTimings["requestCompleted"]) {
+				logPerf("offersRendered", "time to render offers getOffers request completed", perfTime - internalTimings["requestCompleted"]);
+			}
+
 			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
 		});
 
