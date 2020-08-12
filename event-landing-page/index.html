@@ -27,6 +27,8 @@
 		var repeatVisit = urlParams.get("repeatvisit") === "true";
 		var useEcid = urlParams.get("ecid") === "true";
 
+		var useLocalStorageCache = urlParams.get("cache") === "true";
+
 		var at_property = {
 			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
 			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
@@ -45,7 +47,9 @@
 			decisioningFinished: -1,
 			requestCompleted: -1,
 			offersRendered: -1,
-			endToEndOffersRendered: -1
+			endToEndOffersRendered: -1,
+			useLocalStorageCache: useLocalStorageCache,
+			artifactFormat: artifactFormat
 		};
 
 		var catchPointMappings = {
@@ -109,6 +113,8 @@
 			}
 
 			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
+
+			console.log(perfStats);
 		});
 
 		/////////
@@ -144,7 +150,7 @@
 			pollingInterval: 0
 		};
 
-		if(urlParams.get("cache") === "true") {
+		if(useLocalStorageCache) {
 			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
 			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
 		}else {
