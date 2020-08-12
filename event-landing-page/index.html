@@ -11,12 +11,12 @@
 	<meta name="keywords" content="intense web design multipurpose template">
 	<meta name="date" content="Dec 26">
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-	<link rel="stylesheet" type="text/css"
-		  href="//fonts.googleapis.com/css?family=Open+Sans:300,400,700,900%7CFjalla+One">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/style.min.css">
 	<script>
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
+
+		var artifactFormat = urlParams.get("format") !== null ? urlParams.get("format") : "bin";
 
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
@@ -81,49 +81,64 @@
 		});
 
 		document.addEventListener("artifactDownloadSucceeded", function (event) {
-			logPerf("artifactDownloaded", "time to download artifact after at.js loaded", performance.now() - perfStats["atLibraryLoaded"]);
-		});
-
-		document.addEventListener("at-request-succeeded", function (event) {
-			var perfTime = performance.now();
-
-			var requestCompleted = perfTime - perfStats["atLibraryLoaded"];
-
-			if(typeof perfStats["artifactDownloaded"] !== 'undefined') {
-				logPerf("decisioningFinished", "time for decisioning engine to produce decisions", requestCompleted - perfStats["artifactDownloaded"] );
-			}
-
-			logPerf("requestCompleted", "time for getOffers call to complete after at.js loaded", requestCompleted);
+			localStorage.setItem('artifact', JSON.stringify(event.detail.artifactPayload));
 		});
 
 		document.addEventListener("at-content-rendering-succeeded", function (event) {
 			var perfTime = performance.now();
-
-			logPerf("offersRendered", "time to render offers after at.js loaded", perfTime - perfStats["atLibraryLoaded"]);
-			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
 
 			var internalTimings = window.perfTool.getTimings();
 			Object.keys(internalTimings).forEach(key => {
 				logPerf("int_" + key, "", internalTimings[key]);
 			});
 
+			logPerf("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded"]);
+			logPerf("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["decisioningFinished"] );
+			logPerf("requestCompleted", "time for getOffers call to complete", internalTimings["requestCompleted"]);
 
+			logPerf("offersRendered", "time to render offers getOffers request completed", perfTime - internalTimings["requestCompleted"]);
+			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
 		});
 
 		/////////
+		const client = "targettesting";
+		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
+
+		const artifactLocation =  [
+			"https://",
+			cdnBasePath,
+			client,
+			"production",
+			"v1",
+			at_property[property],
+			`rules.${artifactFormat}`
+		].filter(value => typeof value !== "undefined").join("/");
+
+
+		// console.time("localStorage_JSON_parse");
+		// artifactPayload = artifactPayload != null ? JSON.parse(artifactPayload) : undefined
+		// console.timeEnd("localStorage_JSON_parse");
 
 		window.targetGlobalSettings = {
 			overrideMboxEdgeServer: true,
-			clientCode: "targettesting",
+			clientCode: client,
 			imsOrgId: "74F652E95F1B16FE0A495C92@AdobeOrg",
 			serverDomain: "targettesting.tt.omtrdc.net",
 			cookieDomain: location.host,
 			pageLoadEnabled: true,
 			viewsEnabled: true,
 			bodyHidingEnabled: true,
+			bodyHiddenStyle: "body {display: none !important}",
 			decisioningMethod: decisioningMethod,
 			pollingInterval: 0
 		};
+
+		if(urlParams.get("cache") === "true") {
+			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
+			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
+		}else {
+			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
+		}
 
 		function targetPageParams() {
 			return {
@@ -132,29 +147,6 @@
 		}
 	</script>
 	<script src="target/at.min.js"></script>
-
-	<script>
-		// window.adobe.target.getOffers({
-		//   request: {
-		// 	  execute: {
-		// 		  mboxes: [
-		// 			  {
-		// 				  name: "perf1",
-		// 				  index: 1
-		// 			  }
-		// 		  ]
-		// 	  }
-		//   }
-		// }).then(function(response) {
-		//   var option = response.execute.mboxes[0].options[0];
-		//   if(option.type === "html") {
-		// 	  console.log(LOG_TAG, "target response", response, performance.now());
-		// 	  // var div = document.createElement("div");
-		// 	  // div.innerHTML = option.content;
-		// 	  // document.body.appendChild(div);
-		//   }
-		// });
-	</script>
 </head>
 <body>
 <!-- Page-->
@@ -1308,8 +1300,7 @@
 	</div>
 </div>
 <!-- Java script-->
-<script src="js/core.min.js"></script>
-<script src="js/script.js"></script>
+<script src="js/script.min.js"></script>
 <!-- Coded by Mnemon1k-->
 <script>
 	var visit = repeatVisit ? "repeat" : "first";
