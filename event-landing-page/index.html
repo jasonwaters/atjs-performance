@@ -13,7 +13,7 @@
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 	<script>
-		const atjs = "target/at.js";
+		const atjs = "target/at.min.js";
 
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
@@ -23,7 +23,6 @@
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
 		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
-
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
