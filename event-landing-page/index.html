@@ -13,6 +13,8 @@
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 	<script>
+		const atjs = "target/at.js";
+
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
 
@@ -20,7 +22,8 @@
 
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
-		var ondevice = urlParams.get("ondevice") !== null ? urlParams.get("ondevice") === "true" : Math.random() < 0.5; //if ondevice is not forced, do a 50/50 split randomly
+		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
+
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
@@ -34,20 +37,18 @@
 			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
 		}
 
-		var decisioningMethod = ondevice ? "on-device" : "server-side";
-
 		var perfStats = {
 			decisioningMethod: decisioningMethod,
 			property: property,
 			bandwidth: bandwidth,
 			visit: repeatVisit ? "repeat": "first",
 			allocationId: useEcid ? "ecid" : "tntid",
-			artifactDownloaded: -1,
-			atLibraryLoaded: -1,
-			decisioningFinished: -1,
-			requestCompleted: -1,
-			offersRendered: -1,
-			endToEndOffersRendered: -1,
+			artifactDownloaded: 0,
+			atLibraryLoaded: 0,
+			decisioningFinished: 0,
+			requestCompleted: 0,
+			offersRendered: 0,
+			endToEndOffersRendered: 0,
 			useLocalStorageCache: useLocalStorageCache,
 			artifactFormat: artifactFormat
 		};
@@ -70,18 +71,21 @@
 			}
 		};
 
-		function logPerf(eventName, detail, value) {
-			var LOG_TAG = "PERF";
+		function recordPerfStat(eventName, detail, value) {
 			value = typeof value === 'undefined' ? performance.now() : value;
-
 			perfStats[eventName] = Math.round(value);
-			const message = eventName + (typeof detail === "string" && detail.length > 0 ? ` (${detail})` : "");
+		}
 
-			console.log(LOG_TAG, message, perfStats[eventName]);
+		function logPerfStats() {
+			let logText = "perfStats";
+			Object.keys(perfStats)
+					.sort()
+					.forEach(key => logText += `\n  ${key} : ${perfStats[key]}`);
+			console.log(logText);
 		}
 
 		document.addEventListener("at-library-loaded", function (event) {
-			logPerf("atLibraryLoaded", "time to load at.js");
+			recordPerfStat("atLibraryLoaded", "time to load at.js");
 		});
 
 		document.addEventListener("artifactDownloadSucceeded", function (event) {
@@ -89,32 +93,34 @@
 		});
 
 		document.addEventListener("at-content-rendering-succeeded", function (event) {
-			var perfTime = performance.now();
-
 			var internalTimings = window.perfTool.getTimings();
-			Object.keys(internalTimings).forEach(key => {
-				logPerf("int_" + key, "", internalTimings[key]);
-			});
 
-			if(internalTimings["artifactDownloaded"]) {
-				logPerf("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded"]);
+			if(internalTimings["artifactDownloaded_total"]) {
+				recordPerfStat("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded_total"]);
 			}
 
-			if(internalTimings["decisioningFinished"]) {
-				logPerf("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["decisioningFinished"] );
+			if(internalTimings["getOffers_decisioningFinished1"]) {
+				recordPerfStat("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["getOffers_decisioningFinished1"] );
 			}
 
-			if(internalTimings["requestCompleted"]) {
-				logPerf("requestCompleted", "time for getOffers call to complete", internalTimings["requestCompleted"]);
+			if(internalTimings["getOffers_total1"]) {
+				recordPerfStat("requestCompleted", "time for getOffers call to complete", internalTimings["getOffers_total1"]);
 			}
 
-			if(internalTimings["requestCompleted"]) {
-				logPerf("offersRendered", "time to render offers getOffers after request completed", perfTime - internalTimings["requestCompleted"]);
+			if(internalTimings["offersRendered"]) {
+				recordPerfStat("offersRendered", "time to render offers getOffers after request completed", internalTimings["offersRendered"]);
 			}
 
-			logPerf("endToEndOffersRendered", "total time to render from page load", perfTime);
+			recordPerfStat("endToEndOffersRendered", "total time to render from page load");
 
-			console.log(perfStats);
+			getOffersAdHoc().then(response => {
+
+				internalTimings = window.perfTool.getTimings();
+				Object.keys(internalTimings).forEach(key => {
+					recordPerfStat("_int_" + key, "", internalTimings[key]);
+				});
+				logPerfStats()
+			})
 		});
 
 		/////////
@@ -132,10 +138,6 @@
 		].filter(value => typeof value !== "undefined").join("/");
 
 
-		// console.time("localStorage_JSON_parse");
-		// artifactPayload = artifactPayload != null ? JSON.parse(artifactPayload) : undefined
-		// console.timeEnd("localStorage_JSON_parse");
-
 		window.targetGlobalSettings = {
 			overrideMboxEdgeServer: true,
 			clientCode: client,
@@ -151,7 +153,9 @@
 		};
 
 		if(useLocalStorageCache) {
+			console.time("localStorage_JSON_parse");
 			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
+			console.timeEnd("localStorage_JSON_parse");
 			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
 		}else {
 			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
@@ -162,8 +166,32 @@
 				"at_property": at_property[property]
 			};
 		}
+
+		function getOffersAdHoc() {
+			return window.adobe.target.getOffers({
+				request: {
+					execute: {
+						pageLoad: {},
+					},
+					prefetch: {
+						views:[{}],
+						mboxes: [
+							{
+								name: "perf-mbox",
+								index: 1
+							}
+						]
+					}
+				}
+			});
+		}
+
+		window.getOffers = getOffersAdHoc;
+
+		if(decisioningMethod !== "none") {
+			document.write(`<script src="${atjs}"><\/script>`);
+		}
 	</script>
-	<script src="target/at.min.js"></script>
 </head>
 <body>
 <!-- Page-->

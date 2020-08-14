@@ -1,5 +1,5 @@
 //Step-1
-open("https://target-perf-site.netlify.app/?ondevice=false&property=heavy&ecid=true&repeatvisit=false&bandwidth=broadband");
+open("https://target-perf-site.netlify.app/?dmethod=server-side&property=heavy&ecid=true&repeatvisit=false&bandwidth=broadband");
 setStepName("Step1-First Visit")
 waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
@@ -30,7 +30,7 @@ setIndicator("i64216","${var(offersRendered)}")
 setIndicator("i33428","${var(endToEndOffersRendered)}")
 
 //Step-2
-open("https://target-perf-site.netlify.app/?ondevice=false&property=heavy&ecid=true&repeatvisit=true&bandwidth=broadband");
+open("https://target-perf-site.netlify.app/?dmethod=server-side&property=heavy&ecid=true&repeatvisit=true&bandwidth=broadband");
 setStepName("Step2-Repeat Visit")
 waitForElementPresent("//*[@id='action_insert_15960604422991312']", "30000");
 
