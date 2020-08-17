@@ -22,6 +22,8 @@
 
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
+		var noAkamai = urlParams.get("akamai") === "false";
+
 		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
@@ -126,7 +128,11 @@
 		const client = "targettesting";
 		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
 
-		const artifactLocation =  [
+		const locationParts = noAkamai ? [
+			"targetartifacts",
+			at_property[property],
+			`rules.${artifactFormat}`
+		] : [
 			"https://",
 			cdnBasePath,
 			client,
@@ -134,7 +140,9 @@
 			"v1",
 			at_property[property],
 			`rules.${artifactFormat}`
-		].filter(value => typeof value !== "undefined").join("/");
+		]
+
+		const artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
 
 
 		window.targetGlobalSettings = {
