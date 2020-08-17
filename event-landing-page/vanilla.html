@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Vanilla</title>
+	<meta charset="utf-8">
+	<script>
+
+		var queryString = window.location.search;
+		var urlParams = new URLSearchParams(queryString);
+
+		var artifactFormat = urlParams.get("format") !== null ? urlParams.get("format") : "bin";
+		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
+		var noAkamai = urlParams.get("akamai") === "false";
+
+
+		const client = "targettesting";
+		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
+
+		var at_property = {
+			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
+			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
+		}
+
+		const locationParts = noAkamai ? [
+			"targetartifacts",
+			at_property[property],
+			`rules.${artifactFormat}`
+		] : [
+			"https://",
+			cdnBasePath,
+			client,
+			"production",
+			"v1",
+			at_property[property],
+			`rules.${artifactFormat}`
+		]
+
+		const artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
+
+		fetch(artifactLocation).then(res => {});
+	</script>
+</head>
+<body>
+</body>
+</html>
