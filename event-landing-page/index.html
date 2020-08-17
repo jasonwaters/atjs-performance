@@ -10,7 +10,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="keywords" content="intense web design multipurpose template">
 	<meta name="date" content="Dec 26">
-	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 	<script>
 		const atjs = "target/at.min.js";
@@ -112,6 +111,10 @@
 				recordPerfStat("offersRendered", "time to render offers getOffers after request completed", internalTimings["offersRendered"]);
 			}
 
+			if(perfStats["artifactDownloaded"] && perfStats["requestCompleted"]) {
+				recordPerfStat("requestCompleted_total", "artifact download time + request time", perfStats["artifactDownloaded"] + perfStats["requestCompleted"]);
+			}
+
 			recordPerfStat("endToEndOffersRendered", "total time to render from page load");
 
 			getOffersAdHoc().then(response => {
@@ -160,9 +163,10 @@
 		};
 
 		if(useLocalStorageCache) {
-			console.time("localStorage_JSON_parse");
+			const start = new Date().getTime();
 			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
-			console.timeEnd("localStorage_JSON_parse");
+			window.perfStats["_int_localStorage_load_parse"] = new Date().getTime() - start;
+			window.perfStats["artifactDownloaded"] = window.perfStats["_int_localStorage_load_parse"];
 			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
 		}else {
 			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
@@ -238,7 +242,7 @@
 	<!-- Page Contents-->
 	<main class="page-content">
 		<!-- We Provide Only the Best Tours-->
-		<section class="section parallax-container context-dark" data-parallax-img="images/bg-01-1920x908.jpg">
+		<section class="section parallax-container context-dark bg1" data-parallax-img="images/bg-01-1920x908.jpg">
 			<div class="parallax-content">
 				<div class="shell">
 					<div class="range">
@@ -308,7 +312,7 @@
 			</div>
 		</section>
 		<!--Counters-->
-		<section class="section parallax-container context-dark" data-parallax-img="images/bg-02-1920x526.jpg">
+		<section class="section parallax-container context-dark bg2" data-parallax-img="images/bg-02-1920x526.jpg">
 			<div class="parallax-content">
 				<section class="section-98">
 					<div class="shell-wide">
@@ -400,7 +404,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="section parallax-container" data-parallax-img="images/bg-03-1920x1425.jpg">
+		<section class="section parallax-container bg3" data-parallax-img="images/bg-03-1920x1425.jpg">
 			<div class="parallax-content">
 				<div class="section-85 section-lg-124 shell">
 					<div class="range range-xs-center">
@@ -1186,7 +1190,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="section parallax-container context-dark" data-parallax-img="images/bg-04-1920x585.jpg">
+		<section class="section parallax-container bg4 context-dark" data-parallax-img="images/bg-04-1920x585.jpg">
 			<div class="parallax-content">
 				<div class="shell section-98 section-lg-124">
 					<div class="range range-xs-center">
@@ -1351,9 +1355,6 @@
 		</div>
 	</div>
 </div>
-<!-- Java script-->
-<script src="js/script.min.js"></script>
-<!-- Coded by Mnemon1k-->
 <script>
 	var visit = repeatVisit ? "repeat" : "first";
 	document.getElementById("conf-date").innerHTML = visit + ' ' + decisioningMethod + ' ' + property;

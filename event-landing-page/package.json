@@ -4,19 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm run updateAtjs && npm run minify",
+    "prestart": "npm run updateAtjs && npm run minify",
     "start": "http-server . -p 80",
     "generateHtml": "node generateHtml.js",
     "updateAtjs": "rm -rf target/* && cp ../../atjs-library-v2/dist/at* target",
-    "minifycss": "./node_modules/.bin/uglifycss css/style.css --output css/style.min.css",
-	"minifyjs": "./node_modules/.bin/uglifyjs js/core.js js/script.js -o js/script.min.js",
-	"minify": "npm run minifycss && npm run minifyjs"
+    "minifycss": "./node_modules/.bin/purifycss css/style.css index.html --min --info --out css/style.min.css",
+    "minifyjs": "./node_modules/.bin/uglifyjs js/core.js js/script.js -o js/script.min.js",
+    "minify": "npm run minifycss && npm run minifyjs"
   },
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
     "http-server": "^0.12.3",
+    "purify-css": "^1.2.5",
     "uglify-js": "^3.10.1",
     "uglifycss": "0.0.29",
     "uglifyjs": "^2.4.11"

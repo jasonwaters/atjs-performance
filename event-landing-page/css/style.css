@@ -45046,10 +45046,7 @@ td.legendColorBox {
 * Material Parallax
 * --------------------------------------------------
 */
-.parallax-container {
-	position: relative;
-	overflow: hidden;
-}
+
 
 .material-parallax {
 	position: absolute;
@@ -45077,3 +45074,28 @@ td.legendColorBox {
 	position: relative;
 	z-index: 1;
 }
+
+
+.parallax-container {
+	position: relative;
+	overflow: hidden;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+}
+
+.parallax-container.bg1 {
+	background-image: url("/images/bg-01-1920x908.jpg");
+}
+.parallax-container.bg2 {
+	background-image: url("/images/bg-02-1920x526.jpg");
+}
+.parallax-container.bg3 {
+	background-image: url("/images/bg-03-1920x1425.jpg");
+}
+
+.parallax-container.bg4 {
+	background-image: url("/images/bg-04-1920x585.jpg");
+}
+
