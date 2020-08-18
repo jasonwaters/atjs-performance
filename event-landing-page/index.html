@@ -10,6 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="keywords" content="intense web design multipurpose template">
 	<meta name="date" content="Dec 26">
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 	<script>
 		const atjs = "target/at.min.js";
@@ -111,14 +112,9 @@
 				recordPerfStat("offersRendered", "time to render offers getOffers after request completed", internalTimings["offersRendered"]);
 			}
 
-			if(perfStats["artifactDownloaded"] && perfStats["requestCompleted"]) {
-				recordPerfStat("requestCompleted_total", "artifact download time + request time", perfStats["artifactDownloaded"] + perfStats["requestCompleted"]);
-			}
-
 			recordPerfStat("endToEndOffersRendered", "total time to render from page load");
 
 			getOffersAdHoc().then(response => {
-
 				internalTimings = window.perfTool.getTimings();
 				Object.keys(internalTimings).forEach(key => {
 					recordPerfStat("_int_" + key, "", internalTimings[key]);
@@ -131,7 +127,7 @@
 		const client = "targettesting";
 		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
 
-		const locationParts = noAkamai ? [
+		const locationParts = (noAkamai || artifactFormat === "js") ? [
 			"targetartifacts",
 			at_property[property],
 			`rules.${artifactFormat}`
@@ -170,6 +166,7 @@
 			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
 		}else {
 			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
+			window.targetGlobalSettings["artifactFormat"] = artifactFormat;
 		}
 
 		function targetPageParams() {
@@ -1355,9 +1352,5 @@
 		</div>
 	</div>
 </div>
-<script>
-	var visit = repeatVisit ? "repeat" : "first";
-	document.getElementById("conf-date").innerHTML = visit + ' ' + decisioningMethod + ' ' + property;
-</script>
 </body>
 </html>
