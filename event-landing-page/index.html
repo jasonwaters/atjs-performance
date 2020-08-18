@@ -13,12 +13,11 @@
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 	<script>
-		const atjs = "target/at.min.js";
-
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
 
 		var artifactFormat = urlParams.get("format") !== null ? urlParams.get("format") : "bin";
+		var bundle = urlParams.get("bundle") === "true";
 
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
@@ -142,7 +141,7 @@
 		]
 
 		const artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
-
+		const atjs = bundle ? `targetartifacts/${at_property[property]}/rules.at.js` : "target/at.min.js";
 
 		window.targetGlobalSettings = {
 			overrideMboxEdgeServer: true,
