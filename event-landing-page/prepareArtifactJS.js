@@ -19,9 +19,9 @@ function escapeSpecial(str) {
 
 
 Object.values(at_property).forEach(property => {
-	const stringified = escapeSpecial(JSON.stringify(require(`./targetartifacts/${property}/rules.json`)));
-	fs.writeFileSync(`./targetartifacts/${property}/rules.txt`, stringified);
-	fs.writeFileSync(`./targetartifacts/${property}/rules.js`, `window.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${stringified}");`);
+	const stringified = escapeSpecial(JSON.stringify(require(`./target/artifacts/${property}/rules.json`)));
+	fs.writeFileSync(`./target/artifacts/${property}/rules.txt`, stringified);
+	fs.writeFileSync(`./target/artifacts/${property}/rules.js`, `window.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${stringified}");`);
 });
 
 

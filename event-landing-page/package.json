@@ -8,10 +8,10 @@
     "prestart": "npm run build",
 	"start": "http-server . -p 80",
     "generateHtml": "node generateHtml.js",
-    "updateAtjs": "rm -rf target/* && cp ../../atjs-library-v2/dist/at* target",
+    "updateAtjs": "rm -rf target/dist && mkdir -p target/dist && cp ../../atjs-library-v2/dist/at* target/dist",
     "minifycss": "./node_modules/.bin/purifycss css/style.css index.html --min --info --out css/style.min.css",
-    "bundleheavy": "./node_modules/.bin/uglifyjs targetartifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.js target/at.min.js -o targetartifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.at.js",
-    "bundlelean": "./node_modules/.bin/uglifyjs targetartifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/rules.js target/at.min.js -o targetartifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/rules.at.js",
+    "bundleheavy": "./node_modules/.bin/uglifyjs target/artifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.js target/dist/at.min.js -o target/artifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.at.js",
+    "bundlelean": "./node_modules/.bin/uglifyjs target/artifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/rules.js target/dist/at.min.js -o target/artifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/rules.at.js",
 	"bundle": "npm run bundleheavy && npm run bundlelean",
     "minify": "npm run minifycss && npm run bundle",
 	"prepareArtifactJS": "node prepareArtifactJS.js"
