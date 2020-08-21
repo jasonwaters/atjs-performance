@@ -33,6 +33,8 @@
 
 		var noAkamai = urlParams.get("akamai") === "false";
 
+		var embedjs = urlParams.get("embedjs") === "true";
+
 		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
 
 		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
@@ -53,17 +55,59 @@
 			})));
 		}
 
-		if(useEcid) {
-			document.write(`<script src="target/VisitorAPI.js"><\/script>`);
-		}
-	</script>
-	<script>
 
 		var at_property = {
 			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
 			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
 		}
 
+		const clientId = "targettesting";
+		const organizationId = "74F652E95F1B16FE0A495C92@AdobeOrg";
+		const trackingServer = "targettesting.sc.omtrdc.net";
+		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
+
+		const locationParts = (noAkamai || artifactFormat === "js") ? [
+			"target",
+			"artifacts",
+			at_property[property],
+			`rules.${artifactFormat}`
+		] : [
+			"https://",
+			cdnBasePath,
+			clientId,
+			"production",
+			"v1",
+			at_property[property],
+			`rules.${artifactFormat}`
+		]
+
+		let artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
+		const atjs = bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js";
+
+		window.targetGlobalSettings = {
+			overrideMboxEdgeServer: true,
+			clientCode: clientId,
+			imsOrgId: organizationId,
+			serverDomain: "targettesting.tt.omtrdc.net",
+			cookieDomain: location.host,
+			pageLoadEnabled: true,
+			viewsEnabled: true,
+			bodyHidingEnabled: true,
+			bodyHiddenStyle: "body {display: none !important}",
+			decisioningMethod: decisioningMethod,
+			pollingInterval: 0
+		};
+
+		if(embedjs) {
+			artifactLocation = undefined;
+			document.write(`<script src="target/artifacts/${at_property[property]}/rules.js"><\/script>`);
+		}
+
+		if(useEcid) {
+			document.write(`<script src="target/VisitorAPI.js"><\/script>`);
+		}
+	</script>
+	<script>
 		var perfStats = {
 			decisioningMethod: decisioningMethod,
 			property: property,
@@ -152,47 +196,10 @@
 		});
 
 		/////////
-		const clientId = "targettesting";
-		const organizationId = "74F652E95F1B16FE0A495C92@AdobeOrg";
-		const trackingServer = "targettesting.sc.omtrdc.net";
 
 		function randomId(name) {
 			return name + "-" + Math.floor(Math.random()*10000000).toString(10);
 		}
-
-		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
-
-		const locationParts = (noAkamai || artifactFormat === "js") ? [
-			"target",
-			"artifacts",
-			at_property[property],
-			`rules.${artifactFormat}`
-		] : [
-			"https://",
-			cdnBasePath,
-			clientId,
-			"production",
-			"v1",
-			at_property[property],
-			`rules.${artifactFormat}`
-		]
-
-		const artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
-		const atjs = bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js";
-
-		window.targetGlobalSettings = {
-			overrideMboxEdgeServer: true,
-			clientCode: clientId,
-			imsOrgId: organizationId,
-			serverDomain: "targettesting.tt.omtrdc.net",
-			cookieDomain: location.host,
-			pageLoadEnabled: true,
-			viewsEnabled: true,
-			bodyHidingEnabled: true,
-			bodyHiddenStyle: "body {display: none !important}",
-			decisioningMethod: decisioningMethod,
-			pollingInterval: 0
-		};
 
 		if(useLocalStorageCache) {
 			const start = new Date().getTime();
