@@ -5,6 +5,12 @@
   public,
   max-age=3600'''
 
+  for = "*.html"
+  [headers.values]
+  cache-control = '''
+  public,
+  max-age=3600'''
+
   for = "*.js"
   [headers.values]
   cache-control = '''
