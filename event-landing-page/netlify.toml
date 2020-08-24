@@ -1,66 +1,44 @@
 [[headers]]
   for = "*"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.html"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.js"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.css"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.png"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.jpg"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.eot"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.svg"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.ttf"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.woff"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
 
   for = "*.woff2"
   [headers.values]
-  cache-control = '''
-  public,
-  max-age=3600'''
+  Cache-Control = "public, max-age=3600"
