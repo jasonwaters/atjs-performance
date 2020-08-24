@@ -7,6 +7,14 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
+  for = "heavy.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "lean.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
   for = "*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600"
