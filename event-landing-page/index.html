@@ -36,9 +36,9 @@
 
 		var embedjs = urlParams.get("embedjs") === "true";
 
-		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
+		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none", "optimizely"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
 
-		var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
+		var property = urlParams.get("property") !== null && ["lean", "heavy", "real"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
 		var repeatVisit = urlParams.get("repeatvisit") === "true";
 		var noGeo = urlParams.get("geo") === "false";
@@ -59,7 +59,8 @@
 
 		var at_property = {
 			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
-			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646"
+			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646",
+			"real": "bf77db72-3ab6-64ce-3bc5-6208be2f09c1"
 		}
 
 		const clientId = "targettesting";
@@ -243,8 +244,12 @@
 
 		window.getOffers = getOffersAdHoc;
 
-		if(decisioningMethod !== "none") {
+		if(["on-device", "server-side"].indexOf(decisioningMethod) > -1) {
 			document.write(`<script src="${atjs}"><\/script>`);
+		}
+
+		if(decisioningMethod === "optimizely") {
+			document.write(`<script src="https://cdn.optimizely.com/js/18622632374.js"><\/script>`);
 		}
 	</script>
 </head>
