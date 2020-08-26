@@ -3,15 +3,63 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-  for = "index.html"
+  for = "/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-  for = "heavy.html"
+  for = "/css/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-  for = "lean.html"
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/artifacts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/artifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/artifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/artifacts/bf77db72-3ab6-64ce-3bc5-6208be2f09c1/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/target/dist/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/heavy.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/lean.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
+
+  for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
