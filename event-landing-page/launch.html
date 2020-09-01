@@ -12,248 +12,44 @@
 	<meta name="date" content="Dec 26">
 	<link rel="dns-prefetch" href="//target-on-device-decisioning.akamaized.net">
 	<link rel="preconnect" href="//target-on-device-decisioning.akamaized.net">
+
+	<link rel="preconnect" href="//dpm.demdex.net">
+	<link rel="preconnect" href="//fast.targettesting.demdex.net">
+	<link rel="preconnect" href="//targettesting.demdex.net">
+	<link rel="preconnect" href="//cm.everesttech.net">
+	<link rel="preconnect" href="//targettesting.tt.omtrdc.net">
+	<link rel="preconnect" href="//targettesting.sc.omtrdc.net">
+	<link rel="dns-prefetch" href="//dpm.demdex.net">
+	<link rel="dns-prefetch" href="//fast.targettesting.demdex.net">
+	<link rel="dns-prefetch" href="//targettesting.demdex.net">
+	<link rel="dns-prefetch" href="//cm.everesttech.net">
+	<link rel="dns-prefetch" href="//targettesting.tt.omtrdc.net">
+	<link rel="dns-prefetch" href="//targettesting.sc.omtrdc.net">
+
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
-
+	<!--prehiding snippet for Adobe Target with asynchronous Launch deployment-->
 	<script>
-		function setCookie(name,value,days) {
-			var expires = "";
-			if (days) {
-				var date = new Date();
-				date.setTime(date.getTime() + (days*24*60*60*1000));
-				expires = "; expires=" + date.toUTCString();
-			}
-			document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-		}
-
-		var queryString = window.location.search;
-		var urlParams = new URLSearchParams(queryString);
-
-		var artifactFormat = urlParams.get("format") !== null ? urlParams.get("format") : "bin";
-		var bundle = urlParams.get("bundle") === "true";
-
-		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
-
-		var noAkamai = urlParams.get("akamai") === "false";
-
-		var embedjs = urlParams.get("embedjs") === "true";
-
-		var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "none", "optimizely"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
-
-		var property = urlParams.get("property") !== null && ["lean", "heavy", "real"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
-
-		var repeatVisit = urlParams.get("repeatvisit") === "true";
-		var noGeo = urlParams.get("geo") === "false";
-		var useEcid = urlParams.get("ecid") === "true";
-
-		var useLocalStorageCache = urlParams.get("cache") === "true";
-
-		if(noGeo) {
-			setCookie("at_geo", encodeURIComponent(JSON.stringify({
-				"latitude":37.3435,
-				"longitude":-121.8887,
-				"countryCode":"US",
-				"stateCode":"CA",
-				"city":"SANJOSE"
-			})));
-		}
-
-
-		var at_property = {
-			"lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
-			"heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646",
-			"real": "bf77db72-3ab6-64ce-3bc5-6208be2f09c1"
-		}
-
-		const clientId = "targettesting";
-		const organizationId = "74F652E95F1B16FE0A495C92@AdobeOrg";
-		const trackingServer = "targettesting.sc.omtrdc.net";
-		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
-
-		const locationParts = (noAkamai || artifactFormat === "js") ? [
-			"target",
-			"artifacts",
-			at_property[property],
-			`rules.${artifactFormat}`
-		] : [
-			"https://",
-			cdnBasePath,
-			clientId,
-			"production",
-			"v1",
-			at_property[property],
-			`rules.${artifactFormat}`
-		]
-
-		let artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
-		const atjs = bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js";
-
-		window.targetGlobalSettings = {
-			overrideMboxEdgeServer: true,
-			clientCode: clientId,
-			imsOrgId: organizationId,
-			serverDomain: "targettesting.tt.omtrdc.net",
-			cdnBasePath: cdnBasePath,
-			cookieDomain: location.host,
-			pageLoadEnabled: true,
-			viewsEnabled: true,
-			bodyHidingEnabled: true,
-			bodyHiddenStyle: "body {display: none !important}",
-			decisioningMethod: decisioningMethod,
-			pollingInterval: 0
-		};
-
-		if(embedjs) {
-			artifactLocation = undefined;
-			document.write(`<script src="target/artifacts/${at_property[property]}/rules.js"><\/script>`);
-		}
-
-		if(useEcid) {
-			document.write(`<script src="target/VisitorAPI.js"><\/script>`);
-		}
+		(function(g,b,d,f){(function(a,c,d){if(a){var e=b.createElement("style");e.id=c;e.innerHTML=d;a.appendChild(e)}})(b.getElementsByTagName("head")[0],"at-body-style",d);setTimeout(function(){var a=b.getElementsByTagName("head")[0];if(a){var c=b.getElementById("at-body-style");c&&a.removeChild(c)}},f)})(window,document,"body {display: none !important}",3E3);
 	</script>
+	<!--/prehiding snippet for Adobe Target with asynchronous Launch deployment-->
 
 	<script>
-		var perfStats = {
-			decisioningMethod: decisioningMethod,
-			property: property,
-			bandwidth: bandwidth,
-			visit: repeatVisit ? "repeat": "first",
-			allocationId: useEcid ? "ecid" : "tntid",
-			artifactDownloaded: 0,
-			atLibraryLoaded: 0,
-			decisioningFinished: 0,
-			requestCompleted: 0,
-			offersRendered: 0,
-			endToEndOffersRendered: 0,
-			useLocalStorageCache: useLocalStorageCache,
-			artifactFormat: artifactFormat,
-			geo: noGeo ? "disabled" : "enabled"
-		};
-
-		var catchPointMappings = {
-			insights: {
-				"atLibraryLoaded": "i54417",
-				"artifactDownloaded": "i21234",
-				"decisioningFinished": "i41521",
-				"requestCompleted": "i38844",
-				"offersRendered": "i64216",
-				"endToEndOffersRendered": "i33428"
+		var launchData = {
+			"target": {
+				"property": "lean",
+				"decisioningMethod": "on-device"
 			},
-			tracepoints: {
-				"decisioningMethod": "t12125",
-				"property": "t65215",
-				"visit": "t36912",
-				"allocationId": "t41212",
-				"bandwidth": "t81723",
-				"geo": "t76325"
+			"user": {
+				"id": "1234567890ADO"
 			}
 		};
 
-		function recordPerfStat(eventName, detail, value) {
-			value = typeof value === 'undefined' ? performance.now() : value;
-			perfStats[eventName] = Math.round(value);
-		}
 
-		function logPerfStats() {
-			let logText = "perfStats";
-			Object.keys(perfStats)
-					.sort()
-					.forEach(key => logText += `\n  ${key} : ${perfStats[key]}`);
-			console.log(logText);
-		}
 
-		document.addEventListener("at-library-loaded", function (event) {
-			recordPerfStat("atLibraryLoaded", "time to load at.js");
-		});
-
-		document.addEventListener("artifactDownloadSucceeded", function (event) {
-			localStorage.setItem('artifact', JSON.stringify(event.detail.artifactPayload));
-		});
-
-		document.addEventListener("at-content-rendering-succeeded", function (event) {
-			var internalTimings = window.perfTool.getTimings();
-
-			if(internalTimings["artifactDownloaded_total"]) {
-				recordPerfStat("artifactDownloaded", "time to download artifact", internalTimings["artifactDownloaded_total"]);
-			}
-
-			if(internalTimings["getOffers_decisioningFinished1"]) {
-				recordPerfStat("decisioningFinished", "time for decisioning engine to produce decisions", internalTimings["getOffers_decisioningFinished1"] );
-			}
-
-			if(internalTimings["getOffers_total1"]) {
-				recordPerfStat("requestCompleted", "time for getOffers call to complete", internalTimings["getOffers_total1"]);
-			}
-
-			if(internalTimings["offersRendered"]) {
-				recordPerfStat("offersRendered", "time to render offers getOffers after request completed", internalTimings["offersRendered"]);
-			}
-
-			recordPerfStat("endToEndOffersRendered", "total time to render from page load");
-
-			getOffersAdHoc().then(response => {
-				internalTimings = window.perfTool.getTimings();
-				Object.keys(internalTimings).forEach(key => {
-					recordPerfStat("_int_" + key, "", internalTimings[key]);
-				});
-				logPerfStats()
-			})
-		});
-
-		/////////
-
-		function randomId(name) {
-			return name + "-" + Math.floor(Math.random()*10000000).toString(10);
-		}
-
-		if(useLocalStorageCache) {
-			const start = new Date().getTime();
-			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
-			window.perfStats["_int_localStorage_load_parse"] = new Date().getTime() - start;
-			window.perfStats["artifactDownloaded"] = window.perfStats["_int_localStorage_load_parse"];
-			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
-		}else {
-			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
-			window.targetGlobalSettings["artifactFormat"] = artifactFormat;
-		}
-
-		function targetPageParams() {
-			return {
-				"at_property": at_property[property]
-			};
-		}
-
-		function getOffersAdHoc() {
-			return window.adobe.target.getOffers({
-				request: {
-					execute: {
-						pageLoad: {},
-					},
-					prefetch: {
-						views:[{}],
-						mboxes: [
-							{
-								name: "perf-mbox",
-								index: 1
-							}
-						]
-					}
-				},
-				consumerId: Math.floor(Math.random()*10000000).toString(10)
-			});
-		}
-
-		window.getOffers = getOffersAdHoc;
-
-		if(["on-device", "server-side"].indexOf(decisioningMethod) > -1) {
-			document.write(`<script src="${atjs}"><\/script>`);
-		}
-
-		if(decisioningMethod === "optimizely") {
-			document.write(`<script src="https://cdn.optimizely.com/js/18622632374.js"><\/script>`);
-		}
 	</script>
+
+	<script src="//assets.adobedtm.com/1ede4ae35580/22d547f10960/launch-d939f37205d5-development.min.js" async></script>
 </head>
 <body>
 <!-- Page-->
@@ -1406,19 +1202,5 @@
 		</div>
 	</div>
 </div>
-<script>
-	if(useEcid) {
-		document.write(`<script src="target/AppMeasurement.js"><\/script>`);
-	}
-</script>
-<script>
-	if(useEcid) {
-		s.trackingServer = trackingServer;
-		setTimeout(() => {
-			var s_code = s.t();
-			if (s_code) document.write(s_code);
-		}, 1000);
-	}
-</script>
 </body>
 </html>

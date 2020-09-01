@@ -43052,16 +43052,16 @@ td.legendColorBox {
 }
 
 .parallax-container.bg1 {
-	background-image: url("/images/bg-01-1920x908.jpg");
+	background-image: url("../images/bg-01-1920x908.jpg");
 }
 .parallax-container.bg2 {
-	background-image: url("/images/bg-02-1920x526.jpg");
+	background-image: url("../images/bg-02-1920x526.jpg");
 }
 .parallax-container.bg3 {
-	background-image: url("/images/bg-03-1920x1425.jpg");
+	background-image: url("../images/bg-03-1920x1425.jpg");
 }
 
 .parallax-container.bg4 {
-	background-image: url("/images/bg-04-1920x585.jpg");
+	background-image: url("../images/bg-04-1920x585.jpg");
 }
 
