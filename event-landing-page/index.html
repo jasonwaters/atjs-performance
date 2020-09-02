@@ -12,6 +12,8 @@
 	<meta name="date" content="Dec 26">
 	<link rel="dns-prefetch" href="//target-on-device-decisioning.akamaized.net">
 	<link rel="preconnect" href="//target-on-device-decisioning.akamaized.net">
+	<link rel="dns-prefetch" href="//target-on-device-decisioning-dev.akamaized.net">
+	<link rel="preconnect" href="//target-on-device-decisioning-dev.akamaized.net">
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="css/style.min.css">
 
@@ -71,6 +73,7 @@
 		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
 
 		const locationParts = (noAkamai || artifactFormat === "js") ? [
+			"https://target-on-device-decisioning-dev.akamaized.net/target-perf-site",
 			"target",
 			"artifacts",
 			at_property[property],
@@ -86,7 +89,7 @@
 		]
 
 		let artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
-		const atjs = bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js";
+		const atjs = "https://target-on-device-decisioning-dev.akamaized.net/target-perf-site/" + (bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js");
 
 		window.targetGlobalSettings = {
 			overrideMboxEdgeServer: true,
