@@ -8,6 +8,7 @@
     "prestart": "npm run build",
 	"start": "http-server . -p 80",
     "generateHtml": "node generateHtml.js",
+	"purge": "node purge.js",
     "updateAtjs": "rm -rf target/dist && mkdir -p target/dist && cp ../../atjs-library-v2/dist/at* target/dist",
     "minifycss": "./node_modules/.bin/purifycss css/style.css index.html --min --info --out css/style.min.css",
     "bundleheavy": "./node_modules/.bin/uglifyjs target/artifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.js target/dist/at.min.js -o target/artifacts/693de2cd-ac92-d2c7-59fc-a3c0f2bce646/rules.at.js",
