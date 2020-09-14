@@ -10,8 +10,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 	<meta name="keywords" content="intense web design multipurpose template">
 	<meta name="date" content="Dec 26">
-	<link rel="dns-prefetch" href="//target-on-device-decisioning.akamaized.net">
-	<link rel="preconnect" href="//target-on-device-decisioning.akamaized.net">
+	<link rel="dns-prefetch" href="//assets.adobetarget.com">
+	<link rel="preconnect" href="//assets.adobetarget.com">
 	<link rel="dns-prefetch" href="//target-on-device-decisioning-dev.akamaized.net">
 	<link rel="preconnect" href="//target-on-device-decisioning-dev.akamaized.net">
 	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -31,7 +31,7 @@
 		var queryString = window.location.search;
 		var urlParams = new URLSearchParams(queryString);
 
-		var artifactFormat = urlParams.get("format") !== null ? urlParams.get("format") : "bin";
+		var artifactFormat = urlParams.get("format") !== null && ["json", "bin", "js"].indexOf(urlParams.get("format")) > -1 ? urlParams.get("format") : "bin";
 		var bundle = urlParams.get("bundle") === "true";
 
 		var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
@@ -70,10 +70,11 @@
 		const clientId = "targettesting";
 		const organizationId = "74F652E95F1B16FE0A495C92@AdobeOrg";
 		const trackingServer = "targettesting.sc.omtrdc.net";
-		const cdnBasePath = "target-on-device-decisioning.akamaized.net";
+		const cdnBasePath = "assets.adobetarget.com";
+		const perfSiteCdn = "https://target-on-device-decisioning-dev.akamaized.net/target-perf-site";
 
 		const locationParts = (noAkamai || artifactFormat === "js") ? [
-			"https://target-on-device-decisioning-dev.akamaized.net/target-perf-site",
+			perfSiteCdn,
 			"target",
 			"artifacts",
 			at_property[property],
@@ -89,7 +90,7 @@
 		]
 
 		let artifactLocation = locationParts.filter(value => typeof value !== "undefined").join("/");
-		const atjs = "https://target-on-device-decisioning-dev.akamaized.net/target-perf-site/" + (bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js");
+		const atjs = `${perfSiteCdn}/` + (bundle ? `target/artifacts/${at_property[property]}/rules.at.js` : "target/dist/at.min.js");
 
 		window.targetGlobalSettings = {
 			overrideMboxEdgeServer: true,
@@ -108,7 +109,7 @@
 
 		if(embedjs) {
 			artifactLocation = undefined;
-			document.write(`<script src="target/artifacts/${at_property[property]}/rules.js"><\/script>`);
+			document.write(`<script src="${perfSiteCdn}/target/artifacts/${at_property[property]}/rules.js"><\/script>`);
 		}
 
 		if(useEcid) {
@@ -210,15 +211,19 @@
 			return name + "-" + Math.floor(Math.random()*10000000).toString(10);
 		}
 
+		window.targetGlobalSettings["artifactLocation"] = artifactLocation;
+		window.targetGlobalSettings["artifactFormat"] = artifactFormat;
+
 		if(useLocalStorageCache) {
 			const start = new Date().getTime();
 			var artifactPayload = JSON.parse(localStorage.getItem("artifact"));
 			window.perfStats["_int_localStorage_load_parse"] = new Date().getTime() - start;
 			window.perfStats["artifactDownloaded"] = window.perfStats["_int_localStorage_load_parse"];
-			window.targetGlobalSettings["artifactPayload"] = artifactPayload;
-		}else {
-			window.targetGlobalSettings["artifactLocation"] = artifactLocation;
-			window.targetGlobalSettings["artifactFormat"] = artifactFormat;
+			if(artifactPayload != null) {
+				window.targetGlobalSettings["artifactPayload"] = artifactPayload;
+				window.targetGlobalSettings["artifactLocation"] = undefined;
+				window.targetGlobalSettings["artifactFormat"] = undefined;
+			}
 		}
 
 		function targetPageParams() {
