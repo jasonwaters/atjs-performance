@@ -20,7 +20,7 @@ const getAllFiles = function(dirPath, arrayOfFiles=[], excludes=[]) {
 }
 
 const allFiles = getAllFiles(__dirname, [], [/node_modules/, /^\..+/]);
-const urls = allFiles.map(filePath => filePath.replace(__dirname, "https://target-on-device-decisioning-dev.akamaized.net/target-perf-site"));
+const urls = allFiles.map(filePath => filePath.replace(__dirname, "https://assets.adobetarget.com/target-perf-site"));
 
 // https://control.akamai.com/apps/fast-purge/#/ccu-main
 fs.writeFileSync(`${__dirname}/purgethese.txt`, urls.join("\n"));
