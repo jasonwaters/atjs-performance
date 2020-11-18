@@ -1,0 +1,43 @@
+{
+  "name": "atjs-performance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.793.0",
+    "dotenv": "^8.2.0",
+    "edgegrid": "^3.0.8",
+    "fs-extra": "^9.0.1",
+    "http-server": "^0.12.3",
+    "mkdirp": "^1.0.4",
+    "prettier": "^2.1.2",
+    "purify-css": "^1.2.5",
+    "rimraf": "^3.0.2",
+    "terser": "^5.4.0",
+    "uglify-js": "^3.10.1",
+    "uglifycss": "0.0.29",
+    "uglifyjs": "^2.4.11"
+  },
+  "scripts": {
+    "build": "npm run generateArtifacts && npm run minifycss",
+    "start": "http-server public_html -p 80",
+    "generateHtml": "node src/generateHtml.js",
+    "purge": "node src/purge.js",
+    "updateAtjs": "rimraf public_html/target/dist && mkdir -p public_html/target/dist && cp ../atjs-library-v2/dist/at* public_html/target/dist",
+    "minifycss": "./node_modules/.bin/purifycss public_html/css/style.css public_html/index.html --min --info --out public_html/css/style.min.css",
+    "generateArtifacts": "node src/generateArtifacts.js",
+    "postgenerateArtifacts": "rimraf public_html/target/artifacts && cp -R artifacts/target-on-device-decisioning/targettesting/production/v1 public_html/target/artifacts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonwaters/atjs-performance.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jasonwaters/atjs-performance/issues"
+  },
+  "homepage": "https://github.com/jasonwaters/atjs-performance#readme"
+}
