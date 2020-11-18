@@ -20,7 +20,7 @@
     "uglifyjs": "^2.4.11"
   },
   "scripts": {
-    "build": "npm run generateArtifacts && npm run minifycss",
+    "build": "npm run minifycss",
     "start": "http-server public_html -p 80",
     "generateHtml": "node src/generateHtml.js",
     "purge": "node src/purge.js",
