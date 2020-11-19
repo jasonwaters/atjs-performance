@@ -27,7 +27,7 @@
     "updateAtjs": "rimraf public_html/target/dist && mkdir -p public_html/target/dist && cp ../atjs-library-v2/dist/at* public_html/target/dist",
     "minifycss": "./node_modules/.bin/purifycss public_html/css/style.css public_html/index.html --min --info --out public_html/css/style.min.css",
     "generateArtifacts": "node src/generateArtifacts.js",
-    "postgenerateArtifacts": "rimraf public_html/target/artifacts && cp -R artifacts/target-on-device-decisioning/targettesting/production/v1 public_html/target/artifacts"
+    "copyArtifacts": "rimraf public_html/target/artifacts && cp -R artifacts/target-on-device-decisioning/targettesting/production/v1 public_html/target/artifacts"
   },
   "repository": {
     "type": "git",

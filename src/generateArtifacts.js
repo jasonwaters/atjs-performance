@@ -16,7 +16,6 @@ let atJsContent = "";
 const CDN_HOST = "https://assets.adobetarget.com";
 
 const REQUIRED_ENV_VARS = [
-  "CLIENTS",
   "AWS_BUCKET",
   "AWS_ACCESS_KEY",
   "AWS_ACCESS_KEY_SECRET",
@@ -89,7 +88,7 @@ async function invalidateAkamaiURLs(urls) {
   });
 }
 
-async function run() {
+async function run(clients) {
   for (const name of REQUIRED_ENV_VARS) {
     if (!process.env.hasOwnProperty(name)) {
       console.error(`${name} must be set in the .env file.`);
@@ -97,12 +96,10 @@ async function run() {
     }
   }
 
-  const clients = process.env.CLIENTS.split(",")
-    .map((client) => client.trim())
-    .filter((client) => client.length > 0);
-
   if (clients.length === 0) {
-    console.error("No clients specified.");
+    console.error(
+      "No clients specified.  You must specify at least one client as an argument to this script."
+    );
     return;
   }
 
@@ -137,6 +134,11 @@ async function run() {
 
     for (const s3Object of s3ArtifactObjects) {
       const pathParts = s3Object.Key.split("/");
+
+      const propertyToken =
+        pathParts.length === 5 && pathParts[3].length > 10
+          ? pathParts[3]
+          : undefined;
 
       const directoryPath = [
         ARTIFACTS_FOLDER,
@@ -180,14 +182,19 @@ async function run() {
       const jsonArtifactContent = s3ObjectContent.Body.toString();
       const jsonArtifactContent_escaped = escapeSpecial(jsonArtifactContent);
 
+      const targetPageParams =
+        typeof propertyToken !== "undefined"
+          ? `(function(){window.targetPageParams = typeof window.targetPageParams === 'undefined' ? function() {return {"at_property": "${propertyToken}"};} : window.targetPageParams})();`
+          : "";
+
       artifacts["rules.json"].content = jsonArtifactContent;
       artifacts[
         "rules.js"
-      ].content = `window.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${jsonArtifactContent_escaped}");`;
+      ].content = `${targetPageParams}\nwindow.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${jsonArtifactContent_escaped}");`;
 
       artifacts[
         "at.js"
-      ].content = `window.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${jsonArtifactContent_escaped}");${atJsContent}`;
+      ].content = `${targetPageParams}\nwindow.artifactPayload = window.targetGlobalSettings["artifactPayload"] = JSON.parse("${jsonArtifactContent_escaped}");${atJsContent}`;
 
       for (const artifact of Object.values(artifacts)) {
         await deleteFile(artifact.filePath);
@@ -231,4 +238,9 @@ async function run() {
   await invalidateAkamaiURLs(purgeURLs);
 }
 
-run();
+run(
+  process.argv
+    .slice(2)
+    .map((client) => client.trim())
+    .filter((client) => client.length > 0)
+);
