@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Plain</title>
+  <meta charset="utf-8">
+  <link rel="dns-prefetch" href="//assets.adobetarget.com">
+  <link rel="preconnect" href="//assets.adobetarget.com">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <script>
+    function twoDecimals(value) {
+      return (Math.round(value * 100) / 100);
+    }
+
+    function percentile(arr, p) {
+      if (arr.length === 0) return 0;
+      if (typeof p !== "number") throw new TypeError("p must be a number");
+
+      arr.sort(function (a, b) {
+        return a - b;
+      });
+
+      if (p <= 0) return arr[0];
+      if (p >= 1) return arr[arr.length - 1];
+
+      const index = (arr.length - 1) * p,
+        lower = Math.floor(index),
+        upper = lower + 1,
+        weight = index % 1;
+
+      if (upper >= arr.length) return arr[lower];
+      return arr[lower] * (1 - weight) + arr[upper] * weight;
+    }
+  </script>
+  <script>
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+
+    var artifactFormat = urlParams.get("format") !== null && ["json", "bin", "js"].indexOf(urlParams.get("format")) > -1 ? urlParams.get("format") : "json";
+    var bundle = urlParams.get("bundle") === "true";
+
+    var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
+
+    var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "hybrid", "none", "optimizely"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
+
+    var property = urlParams.get("property") !== null && ["lean", "heavy", "real"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
+
+    var repeatVisit = urlParams.get("repeatvisit") === "true";
+
+    var useEcid = urlParams.get("ecid") === "true";
+
+    var isTesting = urlParams.get("testing") === "true";
+
+    var useLocalStorageCache = urlParams.get("cache") === "true";
+
+    var render = urlParams.get("render") === "true";
+
+    var at_property = {
+      "lean": "be92ac4c-e72f-9f82-2a80-2c211ea86578",
+      "heavy": "693de2cd-ac92-d2c7-59fc-a3c0f2bce646",
+      "real": "bf77db72-3ab6-64ce-3bc5-6208be2f09c1"
+    }
+
+    const clientId = "targettesting";
+    const organizationId = "74F652E95F1B16FE0A495C92@AdobeOrg";
+    const trackingServer = "targettesting.sc.omtrdc.net";
+
+    window.targetGlobalSettings = {
+      overrideMboxEdgeServer: true,
+      clientCode: clientId,
+      imsOrgId: organizationId,
+      serverDomain: "targettesting.tt.omtrdc.net",
+      artifactFormat: artifactFormat,
+      cookieDomain: location.host,
+      pageLoadEnabled: render,
+      viewsEnabled: render,
+      bodyHidingEnabled: true,
+      bodyHiddenStyle: "body {display: none !important}",
+      decisioningMethod: decisioningMethod,
+      cacheArtifact: useLocalStorageCache,
+      pollingInterval: 0
+      // cdnEnvironment: "staging"
+    };
+
+  </script>
+
+  <script>
+    var perfStats = {
+      decisioningMethod: decisioningMethod,
+      property: property,
+      bandwidth: bandwidth,
+      visit: repeatVisit ? "repeat" : "first",
+      allocationId: useEcid ? "ecid" : "tntid",
+      artifactDownloaded: 0,
+      atLibraryLoaded: 0,
+      decisioningFinished: 0,
+      requestCompleted: 0,
+      offersRendered: 0,
+      endToEndOffersReady: 0,
+      endToEndOffersRendered: 0,
+      useLocalStorageCache: useLocalStorageCache,
+      artifactFormat: artifactFormat
+    };
+
+    var catchPointMappings = {
+      insights: {
+        "atLibraryLoaded": "i54417",
+        "artifactDownloaded": "i21234",
+        "decisioningFinished": "i41521",
+        "requestCompleted": "i38844",
+        "offersRendered": "i64216",
+        "endToEndOffersRendered": "i33428"
+      },
+      tracepoints: {
+        "decisioningMethod": "t12125",
+        "property": "t65215",
+        "visit": "t36912",
+        "allocationId": "t41212",
+        "bandwidth": "t81723",
+        "geo": "t76325"
+      }
+    };
+
+    function recordPerfStat(eventName, detail, value) {
+      value = typeof value === 'undefined' ? performance.now() : value;
+      perfStats[eventName] = Math.round(value);
+    }
+
+    function recordPerfStatFromInternal(internalTimings, internalKey, perfStatKey) {
+      if(!perfStatKey) {
+        perfStatKey = internalKey;
+      }
+
+      if(internalTimings[internalKey]) {
+        recordPerfStat(perfStatKey, "", internalTimings[internalKey]);
+      }
+    }
+
+    function recordPerfStuff() {
+      let internalTimings = window.perfTool.getTimings();
+
+      recordPerfStatFromInternal(internalTimings, "initTraces");
+      recordPerfStatFromInternal(internalTimings, "initAuthoring");
+      recordPerfStatFromInternal(internalTimings, "initDelivery");
+      recordPerfStatFromInternal(internalTimings, "initAtJs");
+      recordPerfStatFromInternal(internalTimings, "decisioningEngineInstance");
+
+      recordPerfStatFromInternal(internalTimings, "artifactDownloaded_total", "artifactDownloaded");
+      recordPerfStatFromInternal(internalTimings, "artifactGetInitial");
+      recordPerfStatFromInternal(internalTimings, "getOffers_decisioningFinished1", "decisioningFinished");
+      recordPerfStatFromInternal(internalTimings, "getOffers_total1", "requestCompleted");
+      recordPerfStatFromInternal(internalTimings, "offersRendered");
+
+      const now = new Date();
+      const timestamp = now.getTime();
+      const datestring = now.toString();
+
+      const allPerfStats = JSON.parse(localStorage.getItem("allPerfStats")) || [];
+
+      let timeSinceLast = 0;
+
+      if(allPerfStats.length > 0) {
+        const prevPerfStat = allPerfStats[allPerfStats.length-1];
+        timeSinceLast = timestamp - prevPerfStat.timestamp;
+      }
+
+      perfStats = {
+        ...perfStats,
+        timestamp,
+        datestring,
+        timeSinceLast
+      };
+
+      allPerfStats.push(perfStats);
+
+      localStorage.setItem("allPerfStats", JSON.stringify(allPerfStats));
+
+      const summary = {};
+
+      ["endToEndOffersReady", "endToEndOffersRendered", "artifactDownloaded", "requestCompleted"].forEach(key => {
+        if(!summary[key]) {
+          summary[key] = {};
+        }
+
+        const values = allPerfStats.map(obj => obj[key]);
+        const sumStats = allPerfStats.reduce((acc, obj) => acc + obj[key], 0);
+        const numStats = allPerfStats.length;
+
+        [99,95,90,80,50].forEach(percentage => {
+          summary[key][percentage] = twoDecimals(percentile(values, percentage/100));
+        });
+
+        summary[key]["avg"] = twoDecimals(sumStats/numStats);
+      })
+
+
+      console.table(summary);
+
+
+      console.table(allPerfStats, [
+        "decisioningMethod",
+        "property",
+        "initTraces",
+        "initAuthoring",
+        "initDelivery",
+        "initAtJs",
+        "artifactDownloaded",
+        "artifactGetInitial",
+        "decisioningEngineInstance",
+        "decisioningFinished",
+        "requestCompleted",
+        "offersRendered",
+        "atLibraryLoaded",
+        "endToEndOffersReady",
+        "endToEndOffersRendered",
+        "timeSinceLast",
+        "useLocalStorageCache"]);
+
+      if(isTesting) {
+        document.getElementById("test-count").innerText = allPerfStats.length + "";
+      }
+
+      if(isTesting && allPerfStats.length < 30) {
+        setTimeout(() => location.reload(), 10000)
+      }
+    }
+
+
+    function logPerfStats() {
+      let logText = "perfStats";
+      Object.keys(perfStats)
+        .sort()
+        .forEach(key => logText += `\n  ${key} : ${perfStats[key]}`);
+      console.log(logText);
+    }
+
+    document.addEventListener("at-library-loaded", function (event) {
+      recordPerfStat("atLibraryLoaded", "time to load at.js");
+    });
+
+    document.addEventListener("at-content-rendering-succeeded", function (event) {
+      recordPerfStat("endToEndOffersRendered", "total time to render from page load");
+    });
+
+    /////////
+
+    function randomId(name) {
+      return name + "-" + Math.floor(Math.random() * 10000000).toString(10);
+    }
+
+    function targetPageParams() {
+      return {
+        "at_property": at_property[property]
+      };
+    }
+
+  </script>
+  <script src="target/dist/at.min.js"></script>
+  <script>
+    if(!render) {
+      window.adobe.target.getOffers({
+        request: {
+          execute: {
+            pageLoad: {},
+          },
+          prefetch: {
+            views: [{}]
+          }
+        },
+        consumerId: Math.floor(Math.random() * 10000000).toString(10)
+      }).then(offers => {
+        recordPerfStat("endToEndOffersReady", "total time to get offers from page load");
+      });
+    }
+  </script>
+<!--  <script src="target/artifacts/be92ac4c-e72f-9f82-2a80-2c211ea86578/at.js" async></script>-->
+
+  <!--  <script src="http://files.jasonwaters.dev.s3.us-west-1.amazonaws.com/dist/at.min.js" async></script>-->
+</head>
+<body>
+<div class="page text-center">
+  <main class="page-content">
+    <!-- We Provide Only the Best Tours-->
+    <section class="section parallax-container context-dark bg1" data-parallax-img="images/bg-01-1920x908.jpg">
+      <div class="parallax-content">
+        <div class="shell">
+          <div class="range">
+            <div class="range range-xs-center range-xs-middle section-cover section-90">
+              <div class="cell-xs-10 cell-lg-8">
+                <div>
+                  <div class="reveal-inline-block text-extra-small"><span
+                    class="text-middle inset-right-10 icon icon-xxs icon-primary mdi mdi-calendar-today"></span><span
+                    class="text-middle" id="conf-date">July 21-25, 2016</span></div>
+                  <hr class="divider divider-vertical reveal-inline-block">
+                  <div class="reveal-inline-block text-extra-small"><span
+                    class="text-middle inset-right-10 icon icon-xxs icon-primary mdi mdi-map-marker"></span><span
+                    class="text-middle">New York, NY</span></div>
+                </div>
+                <img class="img-responsive center-block offset-top-65" alt="">
+                <p class="offset-top-36 animateItem" data-animation="fadeInUp" data-delay="0.1"
+                   data-duration="1">Our event is devoted to design and development of high-quality
+                  interfaces and increase of<br class="veil reveal-md-inline-block">modern gadgets’
+                  usability. Share your experience and learn something new at Intense Event!</p>
+                <div class="group group-xl offset-top-30 offset-md-top-60"><a
+                  class="btn btn-primary animateItem" href="#" data-animation="fadeInUp"
+                  data-delay="0.2" data-duration="1">Buy Tickets</a><a
+                  class="btn btn-primary-bordered animateItem" href="#" data-animation="fadeInUp"
+                  data-delay="0.2" data-duration="1">Watch Video</a></div>
+                <div class="flipClock"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <button id="btn-start-test">start testing</button>
+  <span id="test-count"></span>
+</div>
+<script>
+
+  document.getElementById("btn-start-test").addEventListener("click", () => {
+    localStorage.clear();
+
+
+    if(isTesting) {
+      location.reload();
+      return;
+    }
+
+    const url = new URL(location.toString());
+    url.searchParams.append("testing", "true");
+    window.location.href = url.toString();
+  });
+
+  setTimeout(() => recordPerfStuff(), 2000);
+
+</script>
+</body>
+</html>

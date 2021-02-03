@@ -66,6 +66,27 @@ Download at.js and include it on a html page like so.
 </head>
 ```
 
+### On-device Decisioning - Cached Artifact (localStorage)
+
+When configured for on-device decisioning with the `cacheArtifact` flag set to `true`, at.js downloads a JSON artifact and caches it using [localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage).  localStorage has proven to be faster than relying on the browser's native caching mechanism.  So repeat visits, after the artifact is cached, benefit from this. 
+
+#### How to use
+
+Download at.js and include it on a html page like so.
+
+```html
+<head>
+    <script>
+        window.targetGlobalSettings = {
+          decisioningMethod: "on-device",
+          cacheArtifact: true
+        };
+    </script>
+    <script src="at.js"></script>
+</head>
+```
+
+
 ### On-device Decisioning - Dynamic Script Include
 
 When configured for on-device decisioning with the dynamic script include option, at.js injects a `<script>` tag into the document header which loads a JavaScript file.  That javascript file simply contains the decisioning artifact within it which is provided to at.js.  It is cached in the browser.  This is beneficial because browsers give special treatment to javascript files and cache them better than other file formats.

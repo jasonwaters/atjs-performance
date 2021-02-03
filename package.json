@@ -21,7 +21,7 @@
   },
   "scripts": {
     "build": "npm run minifycss",
-    "start": "http-server public_html -p 80",
+    "start": "http-server public_html -p 80 -c86400",
     "generateHtml": "node src/generateHtml.js",
     "purge": "node src/purge.js",
     "updateAtjs": "rimraf public_html/target/dist && mkdir -p public_html/target/dist && cp ../atjs-library-v2/dist/at* public_html/target/dist",
