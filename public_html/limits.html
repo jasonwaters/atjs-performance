@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Plain</title>
+  <meta charset="utf-8">
+</head>
+<body>
+<h1>oh hai</h1>
+<script>
+function measureStorage() {
+  let _lsTotal = 0,
+    _xLen, _x;
+
+  for (_x in localStorage) {
+    if (!localStorage.hasOwnProperty(_x)) {
+      continue;
+    }
+    _xLen = ((localStorage[_x].length + _x.length) * 2);
+    _lsTotal += _xLen;
+    console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+  }
+
+  console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB\n\n");
+}
+
+const jibber = "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";
+
+let jibberish = localStorage.getItem("jibberish") || jibber;
+
+
+const timer = setInterval(() => {
+  jibberish += jibber;
+
+  try{
+    localStorage.setItem("jibberish", jibberish);
+    measureStorage();
+  }catch(e) {
+    clearInterval(timer);
+    //Safari: QuotaExceededError 5118.25 KB
+    //Chrome: DOMException: Failed to execute 'setItem' on 'Storage'  10237.75 KB
+    //Firefox: DOMException: The quota has been exceeded  Total = 10237.25 KB
+    console.log("ERR", e);
+    measureStorage();
+  }
+}, 1);
+
+
+
+
+
+</script>
+</body>
+</html>
+
+
+
+

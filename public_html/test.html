@@ -35,7 +35,7 @@
     var queryString = window.location.search;
     var urlParams = new URLSearchParams(queryString);
 
-    var artifactFormat = "json";
+    var artifactFormat = urlParams.get("format") !== null && ["json", "bin", "js"].indexOf(urlParams.get("format")) > -1 ? urlParams.get("format") : "json";
 
     var bandwidth = urlParams.get("bandwidth") !== null ? urlParams.get("bandwidth") : "broadband";
 
@@ -43,13 +43,13 @@
 
     var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
 
-    var visitCount = parseInt(localStorage.getItem("visitCount") || 0);
-
-    var repeatVisit = visitCount > 0;
-
-    localStorage.setItem("visitCount", ++visitCount + "");
+    var repeatVisit = urlParams.get("repeatvisit") === "true";
 
     var useEcid = urlParams.get("ecid") === "true";
+
+    var isTesting = urlParams.get("testing") === "true";
+
+    var useLocalStorageCache = urlParams.get("cache") === "true";
 
     var render = urlParams.get("render") === "true";
 
@@ -74,6 +74,7 @@
       bodyHidingEnabled: true,
       bodyHiddenStyle: "body {display: none !important}",
       decisioningMethod: decisioningMethod,
+      cacheArtifact: useLocalStorageCache,
       pollingInterval: 0
       // cdnEnvironment: "staging"
     };
@@ -94,7 +95,7 @@
       offersRendered: 0,
       endToEndOffersReady: 0,
       endToEndOffersRendered: 0,
-      useLocalStorageCache: true,
+      useLocalStorageCache: useLocalStorageCache,
       artifactFormat: artifactFormat
     };
 
@@ -105,8 +106,7 @@
         "decisioningFinished": "i41521",
         "requestCompleted": "i38844",
         "offersRendered": "i64216",
-        "endToEndOffersRendered": "i33428",
-        "endToEndOffersReady": "i33799"
+        "endToEndOffersRendered": "i33428"
       },
       tracepoints: {
         "decisioningMethod": "t12125",
@@ -192,6 +192,8 @@
 
 
       console.table(summary);
+
+
       console.table(allPerfStats, [
         "decisioningMethod",
         "property",
@@ -210,6 +212,23 @@
         "endToEndOffersRendered",
         "timeSinceLast",
         "useLocalStorageCache"]);
+
+      if(isTesting) {
+        document.getElementById("test-count").innerText = allPerfStats.length + "";
+      }
+
+      if(isTesting && allPerfStats.length < 30) {
+        setTimeout(() => location.reload(), 10000)
+      }
+    }
+
+
+    function logPerfStats() {
+      let logText = "perfStats";
+      Object.keys(perfStats)
+        .sort()
+        .forEach(key => logText += `\n  ${key} : ${perfStats[key]}`);
+      console.log(logText);
     }
 
     document.addEventListener("at-library-loaded", function (event) {
@@ -217,12 +236,7 @@
     });
 
     document.addEventListener("at-content-rendering-succeeded", function (event) {
-      if(render) {
-        recordPerfStat("endToEndOffersRendered", "total time to render from page load");
-        let internalTimings = window.perfTool.getTimings();
-        recordPerfStat("endToEndOffersReady", "", perfStats["endToEndOffersRendered"] - internalTimings["offersRendered"]);
-        recordPerfStuff();
-      }
+      recordPerfStat("endToEndOffersRendered", "total time to render from page load");
     });
 
     /////////
@@ -238,7 +252,7 @@
     }
 
   </script>
-  <script src="target/dist/at-modern.min.js"></script>
+  <script src="target/dist/at.js"></script>
   <script>
     if(!render) {
       window.adobe.target.getOffers({
@@ -253,7 +267,6 @@
         consumerId: Math.floor(Math.random() * 10000000).toString(10)
       }).then(offers => {
         recordPerfStat("endToEndOffersReady", "total time to get offers from page load");
-        recordPerfStuff();
       });
     }
   </script>
@@ -295,6 +308,27 @@
       </div>
     </section>
   </main>
+  <button id="btn-start-test">start testing</button>
+  <span id="test-count"></span>
 </div>
+<script>
+
+  document.getElementById("btn-start-test").addEventListener("click", () => {
+    localStorage.clear();
+
+
+    if(isTesting) {
+      location.reload();
+      return;
+    }
+
+    const url = new URL(location.toString());
+    url.searchParams.append("testing", "true");
+    window.location.href = url.toString();
+  });
+
+  setTimeout(() => recordPerfStuff(), 2000);
+
+</script>
 </body>
 </html>
