@@ -111,6 +111,19 @@ function getRawTestData(access_token, tests, tracepoints = []) {
   }).then((res) => res.json());
 }
 
+function getFavChart(access_token, chartId) {
+  const url = new URL(
+    `${CATCHPOINT_API}/v1/performance/favoriteCharts/${chartId}/data`
+  );
+
+  return fetch(url.toString(), {
+    method: "get",
+    headers: {
+      ...authHeaders(access_token),
+    },
+  }).then((res) => res.json());
+}
+
 module.exports = async function Catchpoint(client_id, client_secret) {
   const { access_token } = await getAccessToken(client_id, client_secret);
 
@@ -121,5 +134,6 @@ module.exports = async function Catchpoint(client_id, client_secret) {
       getRawSingleTestData(access_token, test, tracepoints),
     getRawTestData: (tests, tracepoints) =>
       getRawTestData(access_token, tests, tracepoints),
+    getFavChart: (chartId) => getFavChart(access_token, chartId),
   };
 };

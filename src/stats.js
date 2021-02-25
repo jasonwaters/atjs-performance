@@ -1,26 +1,31 @@
+const fs = require("fs").promises;
 const path = require("path");
 require("dotenv").config({ path: path.resolve("../", ".env") });
 
 const _ = require("lodash");
-const percentile = require("stats-percentile");
+const prettier = require("prettier");
 const Catchpoint = require("./catchpoint");
 
 const tracepoints = [
   {
     id: 6846,
     name: "decisioningMethod",
+    options: ["on-device", "server-side", "hybrid"],
   },
   {
     id: 6848,
     name: "visit",
+    options: ["first", "repeat"],
   },
   {
     id: 6847,
     name: "property",
+    options: ["lean", "heavy"],
   },
   {
     id: 6876,
     name: "bandwidth",
+    options: ["broadband", "3G"],
   },
 ];
 
@@ -40,50 +45,53 @@ async function run() {
     process.env.CATCHPOINT_CLIENT_SECRET
   );
 
-  const tests = await catchpoint.getTests(
-    (test) =>
-      test.product_id === 17928 &&
-      test.status.name === "Active" &&
-      test.type.name === "Web Transactional"
-  );
-  const broadbandTests = tests.filter((test) =>
-    test.name.toLowerCase().includes("broadband")
-  );
-
-  const slowTests = tests.filter((test) =>
-    test.name.toLowerCase().includes("3g")
-  );
-
   const testData = [];
 
-  //get raw test data for each test
-  const results = await catchpoint.getRawSingleTestData(
-    broadbandTests[0],
-    tracepoints.map((tracepoint) => tracepoint.id)
+  const CHART_ODD_THREEG = { id: 226856, bandwidth: "3G" };
+  const CHART_ODD_BROADBAND = { id: 226854, bandwidth: "broadband" };
+
+  for (const chart of [CHART_ODD_BROADBAND, CHART_ODD_THREEG]) {
+    const chartData = await catchpoint.getFavChart(chart.id);
+    simplifyTestData(chartData.detail, chart.bandwidth, testData);
+  }
+
+  await fs.writeFile(
+    path.resolve("../", "public_html", "metrics.json"),
+    prettier.format(
+      JSON.stringify({
+        metrics: testData,
+      }),
+      { parser: "json" }
+    )
   );
-
-  simplifyTestData(results.detail, testData);
-
-  //summarize data
-  debugger;
 }
 
-function simplifyTestData({ fields, items }, testData) {
+function simplifyTestData({ fields, items }, bandwidth, testData) {
   items.forEach((item) => {
-    const { tracepoint, indicators } = item;
+    const { indicators, synthetic_metrics } = item;
 
     const entry = {
-      date: item.dimension.name,
-      location: _.get(item, "breakdown_2.name", ""),
-      property: tracepoint[tracepointsByName.property.id][0].values[0],
-      visit: tracepoint[tracepointsByName.visit.id][0].values[0],
-      decisioningMethod:
-        tracepoint[tracepointsByName.decisioningMethod.id][0].values[0],
-      bandwidth: tracepoint[tracepointsByName.bandwidth.id][0].values[0],
+      bandwidth,
     };
 
+    ["breakdown_1", "breakdown_2", "dimension"].forEach((key) => {
+      const facet = item[key];
+
+      const tp = tracepoints.find(
+        (tracepoint) => tracepoint.options.indexOf(facet.name) >= 0
+      );
+
+      entry[tp.name] = facet.name;
+    });
+
     fields.indicators.forEach(
-      (indicator, idx) => (entry[indicator.name] = indicators[idx])
+      (indicator, idx) =>
+        (entry[`${indicator.name}-${indicator.statistical.prefix}`] =
+          indicators[idx])
+    );
+
+    fields.synthetic_metrics.forEach(
+      (metric, idx) => (entry[`${metric.name}`] = synthetic_metrics[idx])
     );
     testData.push(entry);
   });

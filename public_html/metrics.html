@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>ODD Perf Metrics</title>
+  <meta charset="utf-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <script>
+    Handlebars.registerHelper('notEmptyString', function (value) {
+      return value !== "";
+    });
+
+    Handlebars.registerHelper('isNegative', function (value) {
+      return value < 0;
+    });
+  </script>
+  <script id="statTable" type="text/x-handlebars-template">
+    <div class="col-sm">
+      <table class="table table-responsive-sm table-hover">
+        <caption>{{caption}}</caption>
+        <thead>
+        <tr style="text-align: center">
+          <th colspan="2"></th>
+          <th colspan="2">server-side</th>
+          <th colspan="2">on-device</th>
+          <th colspan="2">hybrid</th>
+        </tr>
+        <tr style="text-align: center">
+          <th colspan="2"></th>
+          <th>ms</th>
+          <th>%</th>
+          <th>ms</th>
+          <th>%</th>
+          <th>ms</th>
+          <th>%</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each data}}
+          <tr  class="table-secondary">
+            <td colspan="2">{{this.name}}</td>
+            <td colspan="6"></td>
+          </tr>
+          {{#each this.values}}
+            <tr>
+              <td colspan="2">&nbsp;&nbsp;&nbsp;{{this.name}}</td>
+              {{#each this.values}}
+                <td title="{{this.numRuns}} runs" {{#if (isNegative this.percent)}}class="table-success"{{/if}}>{{this.ms}}ms</td>
+                <td title="{{this.numRuns}} runs" {{#if (isNegative this.percent)}}class="table-success"{{/if}}>
+                  {{#if (notEmptyString this.percent)}}
+                    {{this.percent}}%
+                  {{/if}}
+                </td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </script>
+</head>
+<body>
+<div id="main" class="container">
+  <h2>On-device decisioning performance data</h2>
+</div>
+<script>
+  function displayMetricsTable(metrics, bandwidth, property) {
+    const filteredMetrics = metrics.filter(metric => metric.bandwidth === bandwidth && metric.property === property);
+
+    const data = [{key: "first", name: "First page"}, {key: "repeat", name: "Subsequent Page"}].reduce((pageData, visit) => {
+      pageData.push({
+        name: visit.name,
+        values: [99,95,50].reduce((latencyRow, percentile) => {
+
+          const key = `endToEndOffersReady-${percentile}th`;
+          const v = filteredMetrics.filter(metric => metric.visit === visit.key)
+
+          latencyRow.push({name: `Added Latency (p${percentile})`, values: ["server-side", "on-device", "hybrid"].reduce((measurements, decisioningMethod, idx) => {
+            const d = v.find(vv => vv.decisioningMethod === decisioningMethod);
+            const ms = d[key];
+            measurements.push({
+                ms,
+                percent: idx === 0 ? "" : (((ms/measurements[0].ms)-1)*100).toFixed(1),
+                numRuns: d["# Runs"]
+            });
+              return measurements;
+            }, [])});
+          return latencyRow;
+        }, [])
+      });
+      return pageData;
+    }, [])
+
+
+    const template = Handlebars.compile(document.getElementById("statTable").innerHTML);
+    return template({ caption: `${bandwidth}, ${property}`, data: data });
+  }
+
+
+  async function run() {
+    const { metrics } = await fetch(`metrics.json?a=${Math.floor(Math.random() * 10001)}`).then(res => res.json());
+    const mainEl = document.getElementById("main");
+
+    ["broadband", "3G"].forEach(bandwidth => {
+      let row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML += displayMetricsTable(metrics, bandwidth, "heavy");
+      row.innerHTML += displayMetricsTable(metrics, bandwidth, "lean");
+      mainEl.append(row);
+    });
+  }
+
+  run();
+</script>
+</body>
+</html>
