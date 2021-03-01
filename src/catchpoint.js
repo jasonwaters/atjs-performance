@@ -54,14 +54,9 @@ function getTestResults(access_token, tests) {
       startTime: format(startTime, "MM-dd-yyyy HH:mm"),
       endTime: format(endTime, "MM-dd-yyyy HH:mm"),
     }),
-  })
-    .then((res) => {
-      debugger;
-      return res.json();
-    })
-    .catch((err) => {
-      debugger;
-    });
+  }).then((res) => {
+    return res.json();
+  });
 }
 
 function getRawSingleTestData(access_token, test, tracepoints = []) {

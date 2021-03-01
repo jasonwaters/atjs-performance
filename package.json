@@ -33,7 +33,8 @@
     "minifycss": "./node_modules/.bin/purifycss public_html/css/style.css public_html/index.html --min --info --out public_html/css/style.min.css",
     "generateArtifacts": "node src/generateArtifacts.js",
     "copyArtifacts": "rimraf public_html/target/artifacts && cp -R artifacts/target-on-device-decisioning/targettesting/production/v1 public_html/target/artifacts",
-    "s3Sync": "aws s3 sync --acl public-read public_html s3://target-perf-site/ --region us-west-1 --cache-control \"public,max-age=86400\" --delete --exclude \"node_modules\" --profile odd-stage"
+    "s3Sync": "aws s3 sync --acl public-read public_html s3://target-perf-site/ --region us-west-1 --cache-control \"public,max-age=86400\" --delete --exclude \"node_modules\" --profile odd-stage",
+    "stats":  "node src/stats.js"
   },
   "repository": {
     "type": "git",

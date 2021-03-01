@@ -5,100 +5,100 @@
       "property": "lean",
       "decisioningMethod": "server-side",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 414,
-      "endToEndOffersReady-95th": 340,
+      "endToEndOffersReady-99th": 422,
+      "endToEndOffersReady-95th": 342,
       "endToEndOffersReady-50th": 247,
-      "# Runs": 750
+      "# Runs": 1139
     },
     {
       "bandwidth": "broadband",
       "property": "lean",
       "decisioningMethod": "server-side",
       "visit": "first",
-      "endToEndOffersReady-99th": 815,
-      "endToEndOffersReady-95th": 606,
+      "endToEndOffersReady-99th": 804,
+      "endToEndOffersReady-95th": 609,
       "endToEndOffersReady-50th": 527,
-      "# Runs": 750
+      "# Runs": 1139
     },
     {
       "bandwidth": "broadband",
       "property": "lean",
       "decisioningMethod": "on-device",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 272,
-      "endToEndOffersReady-95th": 262,
+      "endToEndOffersReady-99th": 296,
+      "endToEndOffersReady-95th": 263,
       "endToEndOffersReady-50th": 239,
-      "# Runs": 751
+      "# Runs": 1140
     },
     {
       "bandwidth": "broadband",
       "property": "lean",
       "decisioningMethod": "on-device",
       "visit": "first",
-      "endToEndOffersReady-99th": 963,
-      "endToEndOffersReady-95th": 665,
-      "endToEndOffersReady-50th": 511,
-      "# Runs": 751
+      "endToEndOffersReady-99th": 889,
+      "endToEndOffersReady-95th": 634,
+      "endToEndOffersReady-50th": 509,
+      "# Runs": 1140
     },
     {
       "bandwidth": "broadband",
       "property": "lean",
       "decisioningMethod": "hybrid",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 277,
+      "endToEndOffersReady-99th": 276,
       "endToEndOffersReady-95th": 255,
       "endToEndOffersReady-50th": 243,
-      "# Runs": 749
+      "# Runs": 1138
     },
     {
       "bandwidth": "broadband",
       "property": "lean",
       "decisioningMethod": "hybrid",
       "visit": "first",
-      "endToEndOffersReady-99th": 798,
-      "endToEndOffersReady-95th": 598,
-      "endToEndOffersReady-50th": 534,
-      "# Runs": 749
+      "endToEndOffersReady-99th": 788,
+      "endToEndOffersReady-95th": 596,
+      "endToEndOffersReady-50th": 533,
+      "# Runs": 1138
     },
     {
       "bandwidth": "broadband",
       "property": "heavy",
       "decisioningMethod": "server-side",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 533,
-      "endToEndOffersReady-95th": 413,
-      "endToEndOffersReady-50th": 286,
-      "# Runs": 747
+      "endToEndOffersReady-99th": 507,
+      "endToEndOffersReady-95th": 415,
+      "endToEndOffersReady-50th": 285,
+      "# Runs": 1136
     },
     {
       "bandwidth": "broadband",
       "property": "heavy",
       "decisioningMethod": "server-side",
       "visit": "first",
-      "endToEndOffersReady-99th": 914,
+      "endToEndOffersReady-99th": 900,
       "endToEndOffersReady-95th": 679,
       "endToEndOffersReady-50th": 602,
-      "# Runs": 747
+      "# Runs": 1136
     },
     {
       "bandwidth": "broadband",
       "property": "heavy",
       "decisioningMethod": "on-device",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 322,
-      "endToEndOffersReady-95th": 295,
+      "endToEndOffersReady-99th": 323,
+      "endToEndOffersReady-95th": 293,
       "endToEndOffersReady-50th": 270,
-      "# Runs": 748
+      "# Runs": 1137
     },
     {
       "bandwidth": "broadband",
       "property": "heavy",
       "decisioningMethod": "on-device",
       "visit": "first",
-      "endToEndOffersReady-99th": 1232,
-      "endToEndOffersReady-95th": 721,
-      "endToEndOffersReady-50th": 559,
-      "# Runs": 748
+      "endToEndOffersReady-99th": 1195,
+      "endToEndOffersReady-95th": 712,
+      "endToEndOffersReady-50th": 558,
+      "# Runs": 1137
     },
     {
       "bandwidth": "broadband",
@@ -106,29 +106,29 @@
       "decisioningMethod": "hybrid",
       "visit": "repeat",
       "endToEndOffersReady-99th": 339,
-      "endToEndOffersReady-95th": 282,
-      "endToEndOffersReady-50th": 266,
-      "# Runs": 748
+      "endToEndOffersReady-95th": 287,
+      "endToEndOffersReady-50th": 265,
+      "# Runs": 1137
     },
     {
       "bandwidth": "broadband",
       "property": "heavy",
       "decisioningMethod": "hybrid",
       "visit": "first",
-      "endToEndOffersReady-99th": 876,
-      "endToEndOffersReady-95th": 677,
-      "endToEndOffersReady-50th": 606,
-      "# Runs": 748
+      "endToEndOffersReady-99th": 830,
+      "endToEndOffersReady-95th": 670,
+      "endToEndOffersReady-50th": 605,
+      "# Runs": 1137
     },
     {
       "bandwidth": "3G",
       "property": "lean",
       "decisioningMethod": "server-side",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 425,
-      "endToEndOffersReady-95th": 362,
+      "endToEndOffersReady-99th": 398,
+      "endToEndOffersReady-95th": 365,
       "endToEndOffersReady-50th": 274,
-      "# Runs": 747
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
@@ -138,57 +138,57 @@
       "endToEndOffersReady-99th": 1539,
       "endToEndOffersReady-95th": 1374,
       "endToEndOffersReady-50th": 1293,
-      "# Runs": 747
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
       "property": "lean",
       "decisioningMethod": "on-device",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 291,
+      "endToEndOffersReady-99th": 288,
       "endToEndOffersReady-95th": 252,
       "endToEndOffersReady-50th": 238,
-      "# Runs": 747
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
       "property": "lean",
       "decisioningMethod": "on-device",
       "visit": "first",
-      "endToEndOffersReady-99th": 1384,
-      "endToEndOffersReady-95th": 1281,
-      "endToEndOffersReady-50th": 1230,
-      "# Runs": 747
+      "endToEndOffersReady-99th": 1386,
+      "endToEndOffersReady-95th": 1278,
+      "endToEndOffersReady-50th": 1227,
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
       "property": "lean",
       "decisioningMethod": "hybrid",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 337,
-      "endToEndOffersReady-95th": 274,
-      "endToEndOffersReady-50th": 247,
-      "# Runs": 747
+      "endToEndOffersReady-99th": 339,
+      "endToEndOffersReady-95th": 275,
+      "endToEndOffersReady-50th": 248,
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
       "property": "lean",
       "decisioningMethod": "hybrid",
       "visit": "first",
-      "endToEndOffersReady-99th": 1535,
-      "endToEndOffersReady-95th": 1391,
-      "endToEndOffersReady-50th": 1282,
-      "# Runs": 747
+      "endToEndOffersReady-99th": 1568,
+      "endToEndOffersReady-95th": 1390,
+      "endToEndOffersReady-50th": 1281,
+      "# Runs": 1136
     },
     {
       "bandwidth": "3G",
       "property": "heavy",
       "decisioningMethod": "server-side",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 1016,
-      "endToEndOffersReady-95th": 838,
-      "endToEndOffersReady-50th": 735,
-      "# Runs": 747
+      "endToEndOffersReady-99th": 946,
+      "endToEndOffersReady-95th": 835,
+      "endToEndOffersReady-50th": 734,
+      "# Runs": 1135
     },
     {
       "bandwidth": "3G",
@@ -196,9 +196,9 @@
       "decisioningMethod": "server-side",
       "visit": "first",
       "endToEndOffersReady-99th": 1893,
-      "endToEndOffersReady-95th": 1856,
-      "endToEndOffersReady-50th": 1816,
-      "# Runs": 747
+      "endToEndOffersReady-95th": 1855,
+      "endToEndOffersReady-50th": 1812,
+      "# Runs": 1135
     },
     {
       "bandwidth": "3G",
@@ -208,37 +208,37 @@
       "endToEndOffersReady-99th": 472,
       "endToEndOffersReady-95th": 449,
       "endToEndOffersReady-50th": 431,
-      "# Runs": 746
+      "# Runs": 1135
     },
     {
       "bandwidth": "3G",
       "property": "heavy",
       "decisioningMethod": "on-device",
       "visit": "first",
-      "endToEndOffersReady-99th": 3548,
-      "endToEndOffersReady-95th": 3237,
-      "endToEndOffersReady-50th": 3179,
-      "# Runs": 746
+      "endToEndOffersReady-99th": 3489,
+      "endToEndOffersReady-95th": 3241,
+      "endToEndOffersReady-50th": 3177,
+      "# Runs": 1135
     },
     {
       "bandwidth": "3G",
       "property": "heavy",
       "decisioningMethod": "hybrid",
       "visit": "repeat",
-      "endToEndOffersReady-99th": 495,
-      "endToEndOffersReady-95th": 458,
+      "endToEndOffersReady-99th": 490,
+      "endToEndOffersReady-95th": 459,
       "endToEndOffersReady-50th": 436,
-      "# Runs": 746
+      "# Runs": 1135
     },
     {
       "bandwidth": "3G",
       "property": "heavy",
       "decisioningMethod": "hybrid",
       "visit": "first",
-      "endToEndOffersReady-99th": 1966,
-      "endToEndOffersReady-95th": 1906,
-      "endToEndOffersReady-50th": 1810,
-      "# Runs": 746
+      "endToEndOffersReady-99th": 1999,
+      "endToEndOffersReady-95th": 1913,
+      "endToEndOffersReady-50th": 1808,
+      "# Runs": 1135
     }
   ]
 }
