@@ -35,21 +35,44 @@
 	<!--/prehiding snippet for Adobe Target with asynchronous Launch deployment-->
 
 	<script>
-		var launchData = {
+
+    var queryString = window.location.search;
+
+    (function (w) {
+
+      w.URLSearchParams = w.URLSearchParams || function (searchString) {
+        var self = this;
+        self.searchString = searchString;
+        self.get = function (name) {
+          var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(self.searchString);
+          if (results == null) {
+            return null;
+          }
+          else {
+            return decodeURI(results[1]) || 0;
+          }
+        };
+      }
+
+    })(window);
+
+    var urlParams = new URLSearchParams(queryString);
+    var decisioningMethod = urlParams.get("dmethod") !== null && ["on-device", "server-side", "hybrid"].indexOf(urlParams.get("dmethod")) > -1 ? urlParams.get("dmethod") : "on-device";
+    var property = urlParams.get("property") !== null && ["lean", "heavy"].indexOf(urlParams.get("property")) > -1 ? urlParams.get("property") : "lean";
+
+    var launchData = {
 			"target": {
-				"property": "lean",
-				"decisioningMethod": "on-device"
+				"property": property,
+				"decisioningMethod": decisioningMethod
 			},
 			"user": {
 				"id": "1234567890ADO"
 			}
 		};
 
-
-
 	</script>
 
-	<script src="//assets.adobedtm.com/1ede4ae35580/22d547f10960/launch-d939f37205d5-development.min.js" async></script>
+  <script src="//assets.adobedtm.com/84c88c42745b/4a064c0e2f53/launch-fc1ab5cc4b41-development.min.js" async></script>
 </head>
 <body>
 <!-- Page-->
