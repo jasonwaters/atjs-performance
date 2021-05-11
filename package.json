@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "date-fns": "^2.17.0",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "node-fetch": "^2.6.1",
     "stats-percentile": "^3.1.0"
   },
